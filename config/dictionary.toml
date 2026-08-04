@@ -1,0 +1,572 @@
+# =============================================================================
+# Northstar Commerce — Enterprise ETL Consolidation  ·  Single Source of TRUST
+# -----------------------------------------------------------------------------
+# This file is the ONLY place where the deterministic PUBLIC rules of the
+# benchmark are defined. It is consumed by the dataset generator, the oracle ETL
+# pipeline, and the verifier. It contains NO hidden material: no random seed, no
+# master/ground-truth data, no per-record corruption directives, no expected
+# outputs, no hidden identifier maps. Anything not in this file must be either a
+# private generator concern (lives in generator/, ships to tests/ only) or must
+# not exist.
+#
+# Rules here are NORMATIVE. Changing a rule here changes every consumer.
+# =============================================================================
+
+version = 1
+
+[meta]
+name = "northstar-commerce-consolidation"
+canonical_currency = "USD"
+line_ending = "\n"
+bom = false
+quoting = "rfc4180"
+
+# -----------------------------------------------------------------------------
+# CURRENCY — exactly one rate per secondary currency keeps conversion
+# deterministic. All money is stored as INTEGER minor units (cents).
+# -----------------------------------------------------------------------------
+[currency]
+base = "USD"
+rates = { USD = 1.0, CAD = 1.32 }   # single fixed FX → deterministic
+rounding = "half_up"
+minor_units = 2
+
+# -----------------------------------------------------------------------------
+# DATETIME — parse order is tried left-to-right; first success wins. Any cell
+# that matches NONE of these becomes NULL (never guessed). Output is always UTC.
+# -----------------------------------------------------------------------------
+[datetime]
+utc = true
+output_format = "iso8601_z"          # 2024-07-01T18:23:41Z
+parse_order = [
+  "iso8601_z",                        # 2024-07-01T18:23:41Z
+  "iso8601_no_z",                     # 2024-07-01T18:23:41
+  "us_mdy_time",                      # 07/01/2024 18:23:41  (non-canonical, corrected)
+  "us_mdy",                           # 07/01/2024  (ERP, some SUP)
+  "date_only",                        # 2024-07-01 (dates)
+  "recover_broken_iso",               # recover ISO with trailing jitter/whitespace
+]
+on_parse_failure = "null"
+
+[datetime.formats]
+iso8601_z = "%Y-%m-%dT%H:%M:%SZ"
+iso8601_no_z = "%Y-%m-%dT%H:%M:%S"
+us_mdy_time = "%m/%d/%Y %H:%M:%S"
+us_mdy = "%m/%d/%Y"
+date_only = "%Y-%m-%d"
+
+# -----------------------------------------------------------------------------
+# NORMALIZATION — applied to every source before matching/merging.
+# -----------------------------------------------------------------------------
+[normalization]
+collapse_internal_ws = true
+
+[normalization.email]
+lowercase = true
+trim = "both"
+
+[normalization.phone]
+rule = "e164"
+default_country_code = "+1"
+keep = '\d'
+strip = '[\s().\-]'
+
+[normalization.name]
+case = "title"
+trim = "both"
+strip_suffix_chars = ".,"
+
+[normalization.postal]
+uppercase = true
+strip_spaces = true
+
+# -----------------------------------------------------------------------------
+# ENTITY MATCHING — deterministic record linkage.
+# A pair is a strong match if any single strong attribute matches exactly.
+# A pair ALSO matches if its composite score >= threshold.
+# Transitivity is applied over STRONG edges only (weak edges never merge blobs).
+# Ties resolve by source_priority (lower number wins), then lexicographic email.
+# -----------------------------------------------------------------------------
+[entity_matching]
+canonical_identity = "gid"
+strong_attribute_rule = "any_single_exact"
+strong_match_attributes = ["email", "phone"]
+composite_threshold = 2
+composite_weights = { email = 2, phone = 2, name = 1, postal = 1, dob = 1 }
+transitivity = "strong_edges_only"
+weak_match_combinations = [
+  ["name", "postal"],
+  ["first_name", "postal", "dob"],
+]
+tie_break_primary = "source_priority"
+tie_break_secondary = "email_lexicographic"
+
+# -----------------------------------------------------------------------------
+# ENTITY KEY ASSIGNMENT + PAYMENT LINKAGE (deterministic, reproducible).
+#   gid: the primary key of the highest-priority (lowest-numbered, per
+#        source_priority) identity source present in the linked cluster —
+#        IDP.sub > CRM.contact_id > CAT.cust_no > MRK.profile_id >
+#        STORE.customer_id > PAY.customer_ref.
+#   A PAYMENT resolves to an order by order_reference first (a STORE order id
+#   `or_…` directly, or an ERP invoice `inv_…` via the invoice→order match)
+#   falling back, when order_reference is empty, to the order with the same
+#   amount_cents (capture) and currency whose placed_ts is the closest non-after
+#   time before paid_ts (earliest on ties by order_key). Unresolvable references
+#   (obsolete/none that match nothing) are dropped, never fabricated.
+# -----------------------------------------------------------------------------
+[keys]
+gid_order = ["IDP", "CRM", "CAT", "MRK", "STORE", "PAY"]
+
+[payment_linkage]
+primary = "order_reference"
+erp_invoice_lookup = "invoice"
+fallback = "amount_currency_time_snapshot"
+max_gap_minutes = 30
+drop_unresolvable = true
+
+# -----------------------------------------------------------------------------
+# CUSTOMER HISTORY RECONSTRUCTION (deterministic change inference).
+# A change for a changeable attribute is reconstructed by comparing exposures
+# within one linked customer; old_value is the stale/as-of/senior-trusted value,
+# new_value the current (precedence-merged) value.
+# -----------------------------------------------------------------------------
+[history]
+attributes = ["email", "last_name", "phone", "postal"]
+multiple_exposures = true
+email_old_sources = ["STORE", "MRK"]
+address_old_source = "CAT"
+effective_from = "idp.updated_ts"        # fallback: earliest new-value observation
+
+# -----------------------------------------------------------------------------
+# PRECEDENCE — conflict resolution is PER-ATTRIBUTE (never per-row). For each
+# canonical attribute, take the value from the highest-priority source that
+# supplies a valid NOn-null value. Nulls are imputed ONLY via precedence (never
+# fabricated).
+# -----------------------------------------------------------------------------
+[precedence]
+per_attribute = true
+rule = "highest_priority_source_with_valid_nonnull"
+null_handling = "skip_invalid"
+
+[precedence.imputation]
+enabled = true
+via_precedence_only = true
+fallback = "null"
+
+# -----------------------------------------------------------------------------
+# SOURCE PRIORITY — SINGLE authoritative ranking (lower = more trustworthy).
+# Consumed by the linker, merger, and every tie-break. Codes must match
+# source.code in [[sources]].
+# -----------------------------------------------------------------------------
+[source_priority]
+IDP = 0
+STORE = 1
+CRM = 2
+CAT = 3
+ERP = 4
+PAY = 5
+SUP = 6
+MRK = 7
+
+# =============================================================================
+# THE EIGHT SOURCE SYSTEMS
+# -----------------------------------------------------------------------------
+# Every column declares a role:
+#   pk  : source primary key
+#   fk  : reference to another entity (refs names the target local entity)
+#   data: ordinary attribute (maps_to names the canonical attribute it carries)
+#   meta: internal/control field (e.g. staleness marker), not a customer attribute
+# roles are SCHEMA declarations only — they carry no values.
+# =============================================================================
+
+# --- 1. STORE — Storefront OMS (near-live), NDJSON export ----------------
+[[sources]]
+code = "STORE"
+priority = 1
+path = "store"
+format = "ndjson"
+file_glob = "orders_*.ndjson"
+datetime_profile = "iso8601_z"
+currency = "USD"
+staleness_months = 0
+
+[sources.id_generation]
+order_id = { type = "hex", prefix = "or_", length = 12 }
+customer_id = { type = "hex", prefix = "sc_", length = 12 }
+
+[sources.schema]
+id = { type = "string", role = "pk", maps_to = "orders.order_key" }
+customer_id = { type = "string", role = "fk", refs = "local_customer" }
+placed_at = { type = "timestamp", role = "data", maps_to = "orders.placed_ts" }
+status = { type = "string", role = "data", maps_to = "orders.status" }
+channel = { type = "string", role = "data", maps_to = "orders.channel" }
+subtotal_cents = { type = "money", role = "data", maps_to = "orders.subtotal_cents" }
+tax_cents = { type = "money", role = "data", maps_to = "orders.tax_cents" }
+shipping_cents = { type = "money", role = "data", maps_to = "orders.shipping_cents", nullable = true }
+total_cents = { type = "money", role = "data", maps_to = "orders.total_cents" }
+currency = { type = "string", role = "data", maps_to = "orders.currency" }
+ship_to = { type = "nested", role = "data", maps_to = "orders.ship_to", keys = { name = "ship_to_name", line1 = "ship_to_line1", city = "ship_to_city", region = "ship_to_region", postal = "ship_to_postal", country = "ship_to_country" } }
+email = { type = "string", role = "data", maps_to = "customers.email" }
+
+# --- 2. PAY — Payment gateway, CSV with HEADER DRIFT ---------------------
+[[sources]]
+code = "PAY"
+priority = 5
+path = "pay"
+format = "csv"
+file_glob = "payments_*.csv"
+datetime_profile = "iso8601_z"
+currency = "mixed"                        # rows carry their own currency
+staleness_months = 0
+min_csv_columns = 8
+header_variants = ["created_ts", "processed_at"]   # older files use created_ts
+
+[sources.id_generation]
+txn_id = { type = "hex", prefix = "txn_", length = 8 }
+customer_ref = { type = "hex", prefix = "cus_", length = 8 }
+
+[sources.schema]
+txn_id = { type = "string", role = "pk", maps_to = "payments.payment_key" }
+customer_ref = { type = "string", role = "fk", refs = "local_customer" }
+order_reference = { type = "string", role = "fk", refs = "order_ref", nullable = true }
+created_ts = { type = "timestamp", role = "data", maps_to = "payments.paid_ts", variant = "created_ts" }
+processed_at = { type = "timestamp", role = "data", maps_to = "payments.paid_ts", variant = "processed_at" }
+amount_cents = { type = "money", role = "data", maps_to = "payments.amount_cents", signed = true }
+currency = { type = "string", role = "data", maps_to = "payments.currency" }
+method = { type = "string", role = "data", maps_to = "payments.method" }
+status = { type = "string", role = "data", maps_to = "payments.status" }
+
+# --- 3. CRM — Sales CRM, CSV RELATIONAL SPLIT ----------------------------
+[[sources]]
+code = "CRM"
+priority = 2
+path = "crm"
+format = "csv"                          # emitted as 3 related files
+files = ["accounts.csv", "contacts.csv", "opportunities.csv"]
+datetime_profile = "iso8601_z"
+currency = "USD"
+staleness_months = 0
+
+[sources.id_generation]
+account_id = { type = "hex", prefix = "acct_", length = 8 }
+contact_id = { type = "hex", prefix = "ct_", length = 8 }
+opportunity_id = { type = "hex", prefix = "opp_", length = 8 }
+
+[sources.accounts]
+account_id = { type = "string", role = "pk", maps_to = "accounts.account_id" }
+account_name = { type = "string", role = "data", maps_to = "accounts.account_name" }
+industry = { type = "string", role = "data", maps_to = "accounts.industry" }
+size_segment = { type = "string", role = "data", maps_to = "accounts.size_segment" }
+billing_email = { type = "string", role = "data", maps_to = "accounts.billing_email" }
+
+[sources.contacts]
+contact_id = { type = "string", role = "pk", maps_to = "customers.customer_key" }
+account_id = { type = "string", role = "fk", refs = "crm_account" }
+first_name = { type = "string", role = "data", maps_to = "customers.first_name" }
+last_name = { type = "string", role = "data", maps_to = "customers.last_name" }
+email = { type = "string", role = "data", maps_to = "customers.email" }
+phone = { type = "string", role = "data", maps_to = "customers.phone" }
+title = { type = "string", role = "data", maps_to = "contacts.title", nullable = true }
+
+[sources.opportunities]
+opp_id = { type = "string", role = "pk", maps_to = "opportunities.opp_id" }
+contact_id = { type = "string", role = "fk", refs = "crm_contact" }
+amount_cents = { type = "money", role = "data", maps_to = "opportunities.amount_cents" }
+stage = { type = "string", role = "data", maps_to = "opportunities.stage" }
+close_date = { type = "timestamp", role = "data", maps_to = "opportunities.close_date" }
+
+# --- 4. ERP — Back-office, CSV NESTED MONTH FOLDERS, US dates ------------
+[[sources]]
+code = "ERP"
+priority = 4
+path = "erp"
+format = "csv_months"                   # erp/2024-07/invoices.csv + shipments.csv
+datetime_profile = "us_mdy"
+currency = "mixed"
+staleness_months = 0
+
+[sources.id_generation]
+invoice_no = { type = "hex", prefix = "inv_", length = 8 }
+shipment_no = { type = "hex", prefix = "shp_", length = 8 }
+customer_internal_id = { type = "numeric", prefix = "", length = 5 }
+
+[sources.invoices]
+invoice_no = { type = "string", role = "pk", maps_to = "orders.order_key" }
+customer_internal_id = { type = "string", role = "fk", refs = "local_customer" }
+bill_to = { type = "string", role = "data", maps_to = "customers.name_block" }
+total_cents = { type = "money", role = "data", maps_to = "orders.total_cents" }
+currency = { type = "string", role = "data", maps_to = "orders.currency" }
+issue_date = { type = "timestamp", role = "data", maps_to = "orders.placed_ts" }
+
+[sources.shipments]
+shipment_no = { type = "string", role = "pk", maps_to = "shipments.shipment_no" }
+invoice_no = { type = "string", role = "fk", refs = "erp_invoice" }
+ship_date = { type = "timestamp", role = "data", maps_to = "shipments.ship_date" }
+carrier = { type = "string", role = "data", maps_to = "shipments.carrier" }
+tracking_no = { type = "string", role = "data", maps_to = "shipments.tracking_no" }
+deliver_to = { type = "string", role = "data", maps_to = "orders.ship_to_name" }
+
+# --- 5. IDP — Identity platform, NDJSON, HIGHEST priority ----------------
+[[sources]]
+code = "IDP"
+priority = 0
+path = "idp"
+format = "ndjson"
+file_glob = "identities.ndjson"
+datetime_profile = "iso8601_z"
+currency = "USD"
+staleness_months = 0
+
+[sources.id_generation]
+sub = { type = "hex", prefix = "idp_", length = 16 }
+
+[sources.schema]
+sub = { type = "string", role = "pk", maps_to = "customers.customer_key" }
+email = { type = "string", role = "data", maps_to = "customers.email", canonical = true }
+email_verified = { type = "bool", role = "data", maps_to = "customers.email_verified" }
+phone = { type = "string", role = "data", maps_to = "customers.phone", canonical = true }
+given_name = { type = "string", role = "data", maps_to = "customers.first_name" }
+family_name = { type = "string", role = "data", maps_to = "customers.last_name" }
+dob = { type = "timestamp", role = "data", maps_to = "customers.dob" }
+gender = { type = "string", role = "data", maps_to = "customers.gender" }
+household = { type = "string", role = "data", maps_to = "customers.household" }
+created_ts = { type = "timestamp", role = "data", maps_to = "customers.created_ts" }
+updated_ts = { type = "timestamp", role = "data", maps_to = "customers.updated_ts" }
+status = { type = "string", role = "data", maps_to = "customers.is_active" }
+profile_completeness = { type = "float", role = "data", maps_to = "customers.profile_completeness" }
+
+# --- 6. SUP — Support helpdesk, CSV with nullable/malformed timestamps ----
+[[sources]]
+code = "SUP"
+priority = 6
+path = "support"
+format = "csv"
+file_glob = "tickets.csv"
+datetime_profile = "iso8601_z"
+currency = "USD"
+staleness_months = 0
+
+[sources.id_generation]
+ticket_id = { type = "hex", prefix = "tk_", length = 8 }
+
+[sources.schema]
+ticket_id = { type = "string", role = "pk", maps_to = "tickets.ticket_key" }
+requester_email = { type = "string", role = "data", maps_to = "customers.email" }
+subject = { type = "string", role = "data", maps_to = "tickets.subject" }
+category = { type = "string", role = "data", maps_to = "tickets.category" }
+priority = { type = "string", role = "data", maps_to = "tickets.priority" }
+status = { type = "string", role = "data", maps_to = "tickets.status" }
+created_ts = { type = "timestamp", role = "data", maps_to = "tickets.created_ts" }
+closed_ts = { type = "timestamp", role = "data", maps_to = "tickets.closed_ts", nullable = true }
+order_ref = { type = "string", role = "fk", refs = "order_ref", nullable = true }
+first_response_minutes = { type = "int", role = "data", maps_to = "tickets.first_response_minutes" }
+resolution_minutes = { type = "int", role = "data", maps_to = "tickets.resolution_minutes", nullable = true }
+
+# --- 7. MRK — Marketing automation, STALE export --------------------------
+[[sources]]
+code = "MRK"
+priority = 7
+path = "marketing"
+format = "csv"
+files = ["subscribers.csv", "sends.csv"]
+datetime_profile = "iso8601_z"
+currency = "USD"
+staleness_months = 3                     # snapshot 3 months old
+
+[sources.id_generation]
+profile_id = { type = "hex", prefix = "mk_", length = 8 }
+send_id = { type = "hex", prefix = "snd_", length = 8 }
+
+[sources.subscribers]
+profile_id = { type = "string", role = "pk", maps_to = "customers.customer_key" }
+email = { type = "string", role = "data", maps_to = "customers.email" }
+first = { type = "string", role = "data", maps_to = "customers.first_name" }
+last = { type = "string", role = "data", maps_to = "customers.last_name" }
+consent_email = { type = "bool", role = "data", maps_to = "customers.consent_email" }
+consent_sms = { type = "bool", role = "data", maps_to = "customers.consent_sms" }
+opt_in_ts = { type = "timestamp", role = "data", maps_to = "customers.opt_in_ts" }
+list = { type = "string", role = "data", maps_to = "memberships.list" }
+postal_code = { type = "string", role = "data", maps_to = "customers.postal", staleness_aware = true }
+
+[sources.sends]
+send_id = { type = "string", role = "pk", maps_to = "sends.send_id" }
+profile_id = { type = "string", role = "fk", refs = "mrk_profile" }
+campaign = { type = "string", role = "data", maps_to = "sends.campaign" }
+sent_ts = { type = "timestamp", role = "data", maps_to = "sends.sent_ts" }
+opened = { type = "bool", role = "data", maps_to = "sends.opened" }
+clicked = { type = "bool", role = "data", maps_to = "sends.clicked" }
+converted_amount_cents = { type = "money", role = "data", maps_to = "sends.converted_amount_cents", nullable = true }
+
+# --- 8. CAT — Retail customer master / POS, numeric ids, renamed names ----
+[[sources]]
+code = "CAT"
+priority = 3
+path = "retail"
+format = "csv"
+file_glob = "customers.csv"
+datetime_profile = "iso8601_z"
+currency = "USD"
+staleness_months = 0
+
+[sources.id_generation]
+cust_no = { type = "numeric", prefix = "", length = 5 }
+
+[sources.schema]
+cust_no = { type = "int", role = "pk", maps_to = "customers.customer_key" }
+email = { type = "string", role = "data", maps_to = "customers.email" }
+first_name = { type = "string", role = "data", maps_to = "customers.first_name" }
+last_name = { type = "string", role = "data", maps_to = "customers.last_name" }
+phone = { type = "string", role = "data", maps_to = "customers.phone" }
+line1 = { type = "string", role = "data", maps_to = "customers.line1" }
+city = { type = "string", role = "data", maps_to = "customers.city" }
+region = { type = "string", role = "data", maps_to = "customers.region" }
+postal_code = { type = "string", role = "data", maps_to = "customers.postal" }
+country = { type = "string", role = "data", maps_to = "customers.country" }
+loyalty_tier = { type = "string", role = "data", maps_to = "customers.loyalty_tier" }
+created_ts = { type = "timestamp", role = "data", maps_to = "customers.created_ts" }
+
+# =============================================================================
+# CANONICAL OUTPUTS — normative. The oracle writes EXACTLY these schemas and the
+# verifier checks the agent's files against them. Names use canonical entities.
+# format enum: int | money | bool | iso | e164 | lowercase_email | uppercase_postal |
+#              name | idstring | empty_is_null
+# =============================================================================
+
+[outputs.customers]
+path = "/app/output/customers.csv"
+format = "csv"
+primary_key = ["customer_key"]
+sort = ["customer_key"]
+nullable_columns = []
+
+[outputs.customers.columns]
+customer_key = { type = "int", format = "int", pk = true }
+gid = { type = "string", format = "idstring", unique = true }
+first_name = { type = "string", format = "name" }
+last_name = { type = "string", format = "name" }
+dob = { type = "string", format = "date_only", nullable = true }
+gender = { type = "string", format = "name", nullable = true }
+email = { type = "string", format = "lowercase_email" }
+phone = { type = "string", format = "e164", nullable = true }
+line1 = { type = "string", format = "name", nullable = true }
+city = { type = "string", format = "name", nullable = true }
+region = { type = "string", format = "uppercase_postal", nullable = true }
+postal = { type = "string", format = "uppercase_postal", nullable = true }
+country = { type = "string", format = "uppercase_postal", nullable = true }
+is_business = { type = "bool", format = "bool" }
+company = { type = "string", format = "name", nullable = true }
+household = { type = "string", format = "idstring", nullable = true }
+loyalty_tier = { type = "string", format = "name", nullable = true }
+is_active = { type = "bool", format = "bool" }
+created_ts = { type = "string", format = "iso", nullable = true }
+updated_ts = { type = "string", format = "iso", nullable = true }
+
+[outputs.orders]
+path = "/app/output/orders.csv"
+format = "csv"
+primary_key = ["order_key"]
+sort = ["customer_key", "placed_ts", "order_key"]
+nullable_columns = []
+
+[outputs.orders.columns]
+customer_key = { type = "int", format = "int", fk = "customers.customer_key" }
+order_key = { type = "int", format = "int", pk = true }
+gid = { type = "string", format = "idstring", unique = true }
+placed_ts = { type = "string", format = "iso" }
+status = { type = "string", format = "name" }
+channel = { type = "string", format = "name" }
+subtotal_cents = { type = "int", format = "money" }
+tax_cents = { type = "int", format = "money" }
+shipping_cents = { type = "int", format = "money", nullable = true }
+total_cents = { type = "int", format = "money" }
+currency = { type = "string", format = "uppercase_postal" }
+ship_to_name = { type = "string", format = "name", nullable = true }
+ship_to_line1 = { type = "string", format = "name", nullable = true }
+ship_to_city = { type = "string", format = "name", nullable = true }
+ship_to_region = { type = "string", format = "uppercase_postal", nullable = true }
+ship_to_postal = { type = "string", format = "uppercase_postal", nullable = true }
+ship_to_country = { type = "string", format = "uppercase_postal", nullable = true }
+amount_usd = { type = "int", format = "money" }
+
+[outputs.payments]
+path = "/app/output/payments.csv"
+format = "csv"
+primary_key = ["payment_key"]
+sort = ["order_key", "paid_ts", "payment_key"]
+nullable_columns = []
+
+[outputs.payments.columns]
+order_key = { type = "int", format = "int", fk = "orders.order_key" }
+payment_key = { type = "int", format = "int", pk = true }
+gid = { type = "string", format = "idstring", unique = true }
+paid_ts = { type = "string", format = "iso" }
+amount_cents = { type = "int", format = "money", signed = true }
+currency = { type = "string", format = "uppercase_postal" }
+amount_usd = { type = "int", format = "money", signed = true }
+method = { type = "string", format = "name" }
+status = { type = "string", format = "name" }
+
+[outputs.customer_history]
+path = "/app/output/customer_history.csv"
+format = "csv"
+primary_key = ["history_key"]
+sort = ["customer_key", "attribute", "effective_from"]
+nullable_columns = []
+
+[outputs.customer_history.columns]
+customer_key = { type = "int", format = "int", fk = "customers.customer_key" }
+history_key = { type = "int", format = "int", pk = true }
+attribute = { type = "string", format = "name" }
+old_value = { type = "string", format = "value", nullable = true }
+new_value = { type = "string", format = "value", nullable = true }
+effective_from = { type = "string", format = "iso" }
+effective_to = { type = "string", format = "empty_is_null", nullable = true }
+source = { type = "string", format = "uppercase_postal" }
+
+[outputs.data_quality_report]
+path = "/app/output/data_quality_report.json"
+format = "json"
+number_type = "int"
+key_order = "sorted"
+include_details = true
+
+# =============================================================================
+# METRICS — exact definitions shared by the oracle's quality_report.py AND the
+# verifier. Each is an INTEGER. "master" = the canonical ground truth (verifier
+# side only; the oracle expresses these against its own reconstruction).
+# =============================================================================
+
+[metrics]
+records_processed = "sum over sources of valid_rows_read"
+records_rejected = "sum over sources of (raw_rows_read - rows_kept_after_parse)"
+duplicate_entities_merged = "count(distinct_source_identities) - count(final.customers)"
+foreign_keys_repaired = "count(fk : resolves_to_master_key AND raw_value != canonical_value)"
+malformed_timestamps_corrected = "count(ts : parseable_only_via_secondary_format OR recovered_broken_iso)"
+null_values_imputed = "count(cell : final_value_sourced_from_higher_priority_source)"
+referential_integrity_violations = "count(fk : is_null_but_key_in_master) - count(genuinely_obsolete_refs)"
+final_customer_count = "count(final.customers)"
+final_order_count = "count(final.orders)"
+final_payment_count = "count(final.payments)"
+
+# -----------------------------------------------------------------------------
+# INVARIANTS — global, deterministic, must all hold on ANY correct output.
+# -----------------------------------------------------------------------------
+
+[invariants]
+order_paid = "for each order: sum(payments.amount_usd for that order_key) == orders.amount_usd when order.status == completed"
+payment_order_exists = "every payment.order_key references an existing order"
+inactive_no_orders = "a customer with is_active == false has no canonical order placed after its deactivation timestamp"
+unique_active_email = "no duplicate normalized email across active customers"
+unique_active_phone = "no duplicate E.164 phone across active customers"
+complete_address = "no non-null address is incomplete (line1 present iff city/postal present)"
+no_resolvable_null_fk = "referential_integrity_violations == 0"
+
+# -----------------------------------------------------------------------------
+# SORTING (canonical, always ascending) — also mirror on outputs[xx].sort.
+# -----------------------------------------------------------------------------
+
+[sorting]
+customers = ["customer_key"]
+orders = ["customer_key", "placed_ts", "order_key"]
+payments = ["order_key", "paid_ts", "payment_key"]
+customer_history = ["customer_key", "attribute", "effective_from"]
