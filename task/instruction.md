@@ -1,4 +1,4 @@
-You are consolidating customer, order, and payment data from eight degraded source systems into a single canonical view for the Northstar Commerce platform.
+You are consolidating customer, order, and payment data from eight degraded source systems into a single canonical view for Northstar Commerce platform.
 
 All source data is under `/app/data/`. Each source system has its own directory (`store`, `pay`, `crm`, `erp`, `idp`, `support`, `marketing`, `retail`) containing CSV or NDJSON exports of varying quality. The files contain intentional corruption you must handle: malformed JSON/CSV rows, wrong column counts, unparseable or inconsistent timestamps, obsolete/missing foreign-key references, duplicate rows, and renamed or inconsistent column values.
 
