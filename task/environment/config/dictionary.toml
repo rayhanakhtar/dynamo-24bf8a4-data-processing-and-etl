@@ -68,8 +68,12 @@ trim = "both"
 [normalization.phone]
 rule = "e164"
 default_country_code = "+1"
-keep = '\d'
-strip = '[\s().\-]'
+keep = '\d'      # only digit characters are retained, in source order
+strip = '[^\d]'  # EVERY non-digit is dropped before formatting
+# canonical value = "+<default_country_code>" + the retained digits, joined with
+# no separators. The default code is ALWAYS prepended, even when the raw value
+# already carried a dialling prefix (source prefixes are not preserved). A raw
+# value with no digits becomes NULL.
 
 [normalization.name]
 case = "title"
@@ -148,16 +152,26 @@ drop_unresolvable = true
 
 # -----------------------------------------------------------------------------
 # CUSTOMER HISTORY RECONSTRUCTION (deterministic change inference).
-# A change for a changeable attribute is reconstructed by comparing exposures
-# within one linked customer; old_value is the stale/as-of/senior-trusted value,
-# new_value the current (precedence-merged) value.
+# Per changeable attribute, old_value is the stale/as-of/senior-trusted value and
+# new_value the current (precedence-merged) value; source is the provider of
+# old_value. Per-attribute old/new pairing:
+#   email:      old = value carried by a STORE or MRK exposure, new = canonical
+#               email, emitted only when they differ (one row per differing
+#               source).
+#   postal:     old = the CAT value, new = canonical postal, when they differ.
+#   last_name:  old = the CAT value, new = the IDP value, when both exist and
+#               differ.
+#   phone:      old = the CAT value, new = the IDP value, when both exist and
+#               differ.
+# effective_from is the customer's updated_ts when it resolves from IDP, else the
+# fixed fallback constant 2024-05-01T00:00:00Z (no IDP observation).
 # -----------------------------------------------------------------------------
 [history]
 attributes = ["email", "last_name", "phone", "postal"]
 multiple_exposures = true
 email_old_sources = ["STORE", "MRK"]
 address_old_source = "CAT"
-effective_from = "idp.updated_ts"        # fallback: earliest new-value observation
+effective_from = "idp.updated_ts"        # fallback: 2024-05-01T00:00:00Z
 
 # -----------------------------------------------------------------------------
 # PRECEDENCE — conflict resolution is PER-ATTRIBUTE (never per-row). For each
@@ -475,8 +489,8 @@ city = { type = "string", format = "name", nullable = true }
 region = { type = "string", format = "uppercase_postal", nullable = true }
 postal = { type = "string", format = "uppercase_postal", nullable = true }
 country = { type = "string", format = "uppercase_postal", nullable = true }
-is_business = { type = "bool", format = "bool" }
-company = { type = "string", format = "name", nullable = true }
+is_business = { type = "bool", format = "bool" }   # true iff the linked cluster contains a CRM "contact" record
+company = { type = "string", format = "name", nullable = true }   # account_name of the CRM account referenced by that contact's account_id (empty when no such association)
 household = { type = "string", format = "idstring", nullable = true }
 loyalty_tier = { type = "string", format = "name", nullable = true }
 is_active = { type = "bool", format = "bool" }
@@ -564,7 +578,7 @@ records_rejected = "sum over sources of (raw_rows_read - rows_kept_after_parse)"
 duplicate_entities_merged = "max(0, count(entity clusters that resolve to a canonical customer) - count(final.customers)); each resolved cluster yields exactly one customer, so this is always 0"
 foreign_keys_repaired = "count(fk : resolves_to_master_key AND raw_value != canonical_value)"
 malformed_timestamps_corrected = "count(ts : parseable_only_via_secondary_format OR recovered_broken_iso)"
-null_values_imputed = "count(cell : final_value_sourced_from_higher_priority_source)"
+null_values_imputed = "count over final.customers of every outputs.customers column except customer_key and gid whose final value is non-null and non-empty; the bool columns is_business and is_active always count. Nulls are imputed ONLY via precedence, so every counted value is one filled or carried by the highest-priority valid source"
 referential_integrity_violations = "count(fk : is_null_but_key_in_master) - count(genuinely_obsolete_refs)"
 final_customer_count = "count(final.customers)"
 final_order_count = "count(final.orders)"
@@ -575,8 +589,8 @@ final_payment_count = "count(final.payments)"
 # -----------------------------------------------------------------------------
 
 [invariants]
-order_paid = "for each order: sum(payments.amount_usd for that order_key) == orders.amount_usd when order.status == completed"
-payment_order_exists = "every payment.order_key references an existing order"
+order_paid = "for each completed order: sum(payments.amount_usd over that order_key, excluding the ERP sentinel 0) == orders.amount_usd"
+payment_order_exists = "every payment.order_key is either the ERP-invoice sentinel 0 or references an existing order; sentinel 0 marks a payment resolved through an ERP invoice match and is excluded from FK resolution and money reconciliation"
 inactive_no_orders = "a customer with is_active == false has no canonical order placed after its deactivation timestamp"
 unique_active_email = "no duplicate normalized email across active customers"
 unique_active_phone = "no duplicate E.164 phone across active customers"
