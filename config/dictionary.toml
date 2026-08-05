@@ -106,17 +106,21 @@ tie_break_primary = "source_priority"
 tie_break_secondary = "email_lexicographic"
 
 # -----------------------------------------------------------------------------
-# ENTITY KEY ASSIGNMENT + PAYMENT LINKAGE (deterministic, reproducible).
-#   gid: the primary key of the highest-priority (lowest-numbered, per
-#        source_priority) identity source present in the linked cluster —
+# IDENTIFIERS (gid) — every canonical record carries a unique gid.
+#   customers.gid: the primary key of the highest-priority (lowest-numbered,
+#        per source_priority) identity source present in the linked cluster —
 #        IDP.sub > CRM.contact_id > CAT.cust_no > MRK.profile_id >
-#        STORE.customer_id > PAY.customer_ref.
-#   A PAYMENT resolves to an order by order_reference first (a STORE order id
-#   `or_…` directly, or an ERP invoice `inv_…` via the invoice→order match)
-#   falling back, when order_reference is empty, to the order with the same
-#   amount_cents (capture) and currency whose placed_ts is the closest non-after
-#   time before paid_ts (earliest on ties by order_key). Unresolvable references
-#   (obsolete/none that match nothing) are dropped, never fabricated.
+#        STORE.customer_id > PAY.customer_ref. Copied verbatim (no prefix).
+#   orders.gid:    DERIVED, never copied from a source: the literal "ORD"
+#        followed by the order_key zero-padded to exactly six digits
+#        ("ORD%06d"). The order_key is the sequential position (starting at 1)
+#        of the order in ascending sort by (customer_key, placed_ts, source
+#        order id), so files are already in key order.
+#   payments.gid:  DERIVED, never copied from a source: the literal "PAY"
+#        followed by the payment_key zero-padded to exactly six digits
+#        ("PAY%06d"). The payment_key is the sequential position (starting at
+#        1) of the payment in ascending sort by (order_key, paid_ts,
+#        amount_cents).
 # -----------------------------------------------------------------------------
 [keys]
 gid_order = ["IDP", "CRM", "CAT", "MRK", "STORE", "PAY"]
@@ -143,6 +147,31 @@ orders = ["customer_key", "placed_ts", "source_order_id"]
 payments = ["order_key", "paid_ts", "amount_cents"]
 customer_history = ["customer_key", "attribute", "effective_from"]
 
+# -----------------------------------------------------------------------------
+# PAYMENT → ORDER LINKAGE (deterministic, reproducible). Resolution order:
+#   (1) order_reference: `or_<id>` links to the order with that source order id;
+#       `inv_<invoice_no>` links through the ERP invoice match below.
+#   (2) fallback, only when order_reference is empty: the order with the same
+#       total_cents == amount_cents and same currency whose placed_ts is the
+#       closest time at or before paid_ts and within max_gap_minutes; on an
+#       equal gap, the lexicographically smallest source order id wins.
+#   ERP invoice → order match: for each invoice, candidate orders are all
+#       canonical orders; a candidate matches iff order.total_cents ==
+#       invoice.total_cents, order.currency == invoice.currency,
+#       order.ship_to_name == invoice.bill_to, and the absolute day difference
+#       between order.placed_ts and invoice.issue_date is <= 10 (both dates are
+#       required). Among matching candidates pick the smallest absolute day
+#       gap; on an equal gap, the lexicographically smallest source order id.
+#       Each invoice maps to at most one order.
+#   Sentinel: a payment linked through an `inv_` reference is emitted with
+#       order_key == 0 (the ERP match is a detached reference, never joined to
+#       a canonical order row) and is excluded from FK resolution and money
+#       reconciliation. `inv_`/`or_` references that match nothing, and empty
+#       references with no fallback candidate, are dropped (never fabricated).
+#   Duplicate payments — identical (customer_ref, order_ref, paid_ts,
+#       amount_cents, currency, method, status) — emit the first occurrence
+#       only.
+# -----------------------------------------------------------------------------
 [payment_linkage]
 primary = "order_reference"
 erp_invoice_lookup = "invoice"
@@ -589,7 +618,7 @@ final_payment_count = "count(final.payments)"
 # -----------------------------------------------------------------------------
 
 [invariants]
-order_paid = "for each completed order: sum(payments.amount_usd over that order_key, excluding the ERP sentinel 0) == orders.amount_usd"
+order_paid = "for each order whose status equals Completed (the Title-cased value required by the name column format): sum(payments.amount_usd over that order_key, excluding the ERP sentinel 0) == orders.amount_usd"
 payment_order_exists = "every payment.order_key is either the ERP-invoice sentinel 0 or references an existing order; sentinel 0 marks a payment resolved through an ERP invoice match and is excluded from FK resolution and money reconciliation"
 inactive_no_orders = "a customer with is_active == false has no canonical order placed after its deactivation timestamp"
 unique_active_email = "no duplicate normalized email across active customers"

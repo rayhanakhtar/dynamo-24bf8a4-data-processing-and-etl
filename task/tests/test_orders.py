@@ -84,7 +84,7 @@ def test_completed_orders_reconcile_with_payments(orders, payments):
                 + int(p["amount_usd"])
     mismatches = []
     for r in order_rows:
-        if r["status"] == "completed":
+        if r["status"] == "Completed":
             key = int(r["order_key"])
             if int(r["amount_usd"]) != by_order.get(key, 0):
                 mismatches.append((key, r["amount_usd"], by_order.get(key, 0)))
