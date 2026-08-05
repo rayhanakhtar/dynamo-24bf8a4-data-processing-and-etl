@@ -91,6 +91,33 @@ def test_completed_orders_reconcile_with_payments(orders, payments):
     assert not mismatches, f"reconciliation mismatches: {mismatches[:5]}"
 
 
+def test_orders_customer_fk_integrity(orders, customers):
+    """Every order.customer_key must reference an existing customer."""
+    _, order_rows = orders
+    _, customer_rows = customers
+    customer_keys = {int(r["customer_key"]) for r in customer_rows}
+    for r in order_rows:
+        ck = int(r["customer_key"])
+        assert ck in customer_keys, f"order {r['order_key']} references non-existent customer_key {ck}"
+
+
+def test_order_gid_format(orders):
+    """Order gid must match pattern ORDxxxxxx."""
+    import re
+    pattern = re.compile(r"^ORD\d{6}$")
+    _, rows = orders
+    for r in rows:
+        assert pattern.match(r["gid"]), f"order {r['order_key']} gid {r['gid']!r} does not match ORDxxxxxx"
+
+
+def test_order_status_values(orders):
+    """Order status must be one of the canonical values from the dictionary."""
+    _, rows = orders
+    valid_statuses = {"Processing", "Completed", "Pending", "Cancelled", "Returned", "Shipped", "Refunded", "Partially_Refunded"}
+    for r in rows:
+        assert r["status"] in valid_statuses, f"order {r['order_key']} invalid status: {r['status']!r}"
+
+
 def test_fixture_byte_equality(output_dir, expected_dir):
     """Produced artifact and committed fixture are byte-for-byte identical."""
     produced = artifact_path(output_dir, "orders")

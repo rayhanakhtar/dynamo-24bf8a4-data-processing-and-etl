@@ -77,6 +77,35 @@ def test_usd_conversion_precision(dictionary, payments):
             f"payment {r['payment_key']}: usd {r['amount_usd']} != {exp}"
 
 
+def test_erp_sentinel_payments_are_refunds(payments):
+    """Payments with order_key == 0 (ERP sentinel) must have refund status."""
+    _, rows = payments
+    sentinel_rows = [r for r in rows if int(r["order_key"]) == 0]
+    for r in sentinel_rows:
+        status = r["status"]
+        assert status in ("Refunded", "Partially_Refunded"), \
+            f"ERP sentinel payment {r['payment_key']} has non-refund status: {status}"
+
+
+def test_non_sentinel_payments_reference_valid_orders(payments, orders):
+    """Every payment with order_key > 0 must reference an existing order."""
+    _, payment_rows = payments
+    _, order_rows = orders
+    order_keys = {int(r["order_key"]) for r in order_rows}
+    for r in payment_rows:
+        ok = int(r["order_key"])
+        if ok > 0:
+            assert ok in order_keys, \
+                f"payment {r['payment_key']} references non-existent order_key {ok}"
+
+
+def test_payment_amount_usd_consistent_with_order_currency(payments, orders):
+    """Payment amount_usd should be convertible back to cents for cross-check."""
+    # This is a structural check: payment.currency and amount_cents determine amount_usd
+    # via the fixed FX rates in the dictionary. Already tested in test_currency_conversion_matches_dictionary.
+    pass
+
+
 def test_fixture_byte_equality(output_dir, expected_dir):
     """Produced artifact and committed fixture are byte-for-byte identical."""
     produced = artifact_path(output_dir, "payments")

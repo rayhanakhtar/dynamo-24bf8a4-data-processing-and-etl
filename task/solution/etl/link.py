@@ -250,6 +250,7 @@ def _merge_component(members, nodes, raw, rules, pri) -> Optional[Customer]:
             _val(values, "created_ts", pri["CAT"], rid, ob.get("created"))
         elif src == "MRK":
             identities.setdefault("MRK", set()).add(ob["profile_id"])
+            _exp(exposures, ob, "email", ob.get("email"), "MRK")
             _exp(exposures, ob, "last_name", ob.get("last_name"), "MRK")
             _exp(exposures, ob, "postal", ob.get("postal"), "MRK")
             _val(values, "email", pri["MRK"], rid, ob.get("email"))

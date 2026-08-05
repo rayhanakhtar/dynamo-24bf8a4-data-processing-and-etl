@@ -94,6 +94,49 @@ def test_source_is_declared_provenance(history):
         assert r["source"] == r["source"].upper()
 
 
+def test_email_history_source_is_store_or_mrk(history):
+    """Email history rows must have source STORE or MRK per dictionary spec."""
+    _, rows = history
+    for r in rows:
+        if r["attribute"] == "email":
+            assert r["source"] in ("STORE", "MRK"), \
+                f"history {r['history_key']}: email source must be STORE or MRK, got {r['source']!r}"
+
+
+def test_postal_history_source_is_cat(history):
+    """Postal history rows must have source CAT per dictionary spec."""
+    _, rows = history
+    for r in rows:
+        if r["attribute"] == "postal":
+            assert r["source"] == "CAT", \
+                f"history {r['history_key']}: postal source must be CAT, got {r['source']!r}"
+
+
+def test_last_name_phone_history_source_is_cat(history):
+    """last_name and phone history rows must have source CAT per dictionary spec."""
+    _, rows = history
+    for r in rows:
+        if r["attribute"] in ("last_name", "phone"):
+            assert r["source"] == "CAT", \
+                f"history {r['history_key']}: {r['attribute']} source must be CAT, got {r['source']!r}"
+
+
+def test_effective_from_rule(history, customers):
+    """effective_from is customer's updated_ts if IDP present, else fallback 2024-05-01T00:00:00Z."""
+    _, history_rows = history
+    _, customer_rows = customers
+    cust_by_key = {int(r["customer_key"]): r for r in customer_rows}
+    for r in history_rows:
+        ck = int(r["customer_key"])
+        cust = cust_by_key.get(ck)
+        if cust:
+            updated_ts = cust["updated_ts"]
+            # effective_from should be updated_ts if present, else fallback
+            expected = updated_ts if updated_ts else "2024-05-01T00:00:00Z"
+            assert r["effective_from"] == expected, \
+                f"history {r['history_key']}: effective_from {r['effective_from']} != expected {expected}"
+
+
 def test_fixture_byte_equality(output_dir, expected_dir):
     """Produced artifact and committed fixture are byte-for-byte identical."""
     produced = artifact_path(output_dir, "history")

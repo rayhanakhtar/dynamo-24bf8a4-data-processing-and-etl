@@ -78,14 +78,43 @@ def artifact_path(dir_: Path, artifact: str) -> Path:
     return dir_ / ARTIFACTS[artifact]
 
 
-def read_csv(path: Path) -> Tuple[List[str], List[Dict[str, str]]]:
+def _validate_artifact_path(path: Path, base_dir: Path) -> None:
+    """Validate that an artifact path is safe to read.
+    
+    Rejects:
+    - Symlinked files
+    - Paths whose realpath escapes the base directory
+    - Symlinked base directory
+    """
+    try:
+        real_path = path.resolve(strict=True)
+        real_base = base_dir.resolve(strict=True)
+    except OSError as e:
+        raise RuntimeError(f"Path resolution failed for {path}: {e}")
+    
+    # Check if the path is a symlink
+    if path.is_symlink():
+        raise RuntimeError(f"Artifact path is a symlink: {path}")
+    
+    # Check if the resolved path escapes the base directory
+    try:
+        real_path.relative_to(real_base)
+    except ValueError:
+        raise RuntimeError(f"Artifact path escapes base directory: {path} -> {real_path}")
+
+
+def read_csv(path: Path, base_dir: Optional[Path] = None) -> Tuple[List[str], List[Dict[str, str]]]:
+    if base_dir is not None:
+        _validate_artifact_path(path, base_dir)
     with open(path, "r", encoding="utf-8", newline="") as fh:
         rows = list(csv.reader(fh))
     header = rows[0]
     return header, [dict(zip(header, row)) for row in rows[1:]]
 
 
-def read_report(path: Path) -> Dict[str, Any]:
+def read_report(path: Path, base_dir: Optional[Path] = None) -> Dict[str, Any]:
+    if base_dir is not None:
+        _validate_artifact_path(path, base_dir)
     with open(path, "r", encoding="utf-8") as fh:
         return json.load(fh)
 
@@ -175,32 +204,32 @@ def expected_dir() -> Path:
 
 @pytest.fixture(scope="session")
 def customers(dictionary, output_dir) -> Tuple[List[str], List[Dict[str, str]]]:
-    header, rows = read_csv(artifact_path(output_dir, "customers"))
+    header, rows = read_csv(artifact_path(output_dir, "customers"), output_dir)
     assert header == [c for c, _ in dictionary.output_columns("customers")]
     return header, rows
 
 
 @pytest.fixture(scope="session")
 def orders(dictionary, output_dir) -> Tuple[List[str], List[Dict[str, str]]]:
-    header, rows = read_csv(artifact_path(output_dir, "orders"))
+    header, rows = read_csv(artifact_path(output_dir, "orders"), output_dir)
     assert header == [c for c, _ in dictionary.output_columns("orders")]
     return header, rows
 
 
 @pytest.fixture(scope="session")
 def payments(dictionary, output_dir) -> Tuple[List[str], List[Dict[str, str]]]:
-    header, rows = read_csv(artifact_path(output_dir, "payments"))
+    header, rows = read_csv(artifact_path(output_dir, "payments"), output_dir)
     assert header == [c for c, _ in dictionary.output_columns("payments")]
     return header, rows
 
 
 @pytest.fixture(scope="session")
 def history(dictionary, output_dir) -> Tuple[List[str], List[Dict[str, str]]]:
-    header, rows = read_csv(artifact_path(output_dir, "history"))
+    header, rows = read_csv(artifact_path(output_dir, "history"), output_dir)
     assert header == [c for c, _ in dictionary.output_columns("customer_history")]
     return header, rows
 
 
 @pytest.fixture(scope="session")
 def report(output_dir) -> Dict[str, Any]:
-    return read_report(artifact_path(output_dir, "report"))
+    return read_report(artifact_path(output_dir, "report"), output_dir)

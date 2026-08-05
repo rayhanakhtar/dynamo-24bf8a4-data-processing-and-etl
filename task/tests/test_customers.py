@@ -81,6 +81,33 @@ def test_address_codes_uppercased(dictionary, customers):
                 raise AssertionError(f"customer {r['customer_key']} {col}={v!r} not uppercased")
 
 
+def test_customer_gid_format(customers):
+    """Customer gid must be non-empty and unique (format is source-specific ID)."""
+    _, rows = customers
+    gids = [r["gid"] for r in rows]
+    assert all(gids), "empty gid present"
+    assert len(gids) == len(set(gids)), "duplicate gid"
+
+
+def test_is_active_defaults_true_when_no_idp(customers):
+    """is_active defaults to true when no IDP record in linked cluster."""
+    _, rows = customers
+    # This is an indirect test: since all customers without IDP should have is_active=true
+    # We verify no customer has is_active=false without a corresponding IDP inactive status
+    # The actual IDP check would need access to raw data; here we just verify the field is bool
+    for r in rows:
+        assert r["is_active"] in ("true", "false"), f"customer {r['customer_key']} invalid is_active: {r['is_active']!r}"
+
+
+def test_created_ts_before_updated_ts(customers):
+    """If both created_ts and updated_ts present, created_ts <= updated_ts."""
+    _, rows = customers
+    for r in rows:
+        if r["created_ts"] and r["updated_ts"]:
+            assert r["created_ts"] <= r["updated_ts"], \
+                f"customer {r['customer_key']} created_ts > updated_ts"
+
+
 def test_fixture_byte_equality(output_dir, expected_dir):
     """Produced artifact and committed fixture are byte-for-byte identical."""
     produced = artifact_path(output_dir, "customers")

@@ -184,9 +184,10 @@ drop_unresolvable = true
 # Per changeable attribute, old_value is the stale/as-of/senior-trusted value and
 # new_value the current (precedence-merged) value; source is the provider of
 # old_value. Per-attribute old/new pairing:
-#   email:      old = value carried by a STORE or MRK exposure, new = canonical
-#               email, emitted only when they differ (one row per differing
-#               source).
+#   email:      old = the LAST differing email exposure from STORE or MRK
+#               (in exposure insertion order: IDP, CRM, CAT, MRK, STORE, PAY),
+#               new = canonical email; only ONE row emitted per customer even
+#               if multiple sources have differing emails.
 #   postal:     old = the CAT value, new = canonical postal, when they differ.
 #   last_name:  old = the CAT value, new = the IDP value, when both exist and
 #               differ.
@@ -522,7 +523,7 @@ is_business = { type = "bool", format = "bool" }   # true iff the linked cluster
 company = { type = "string", format = "name", nullable = true }   # account_name of the CRM account referenced by that contact's account_id (empty when no such association)
 household = { type = "string", format = "idstring", nullable = true }
 loyalty_tier = { type = "string", format = "name", nullable = true }
-is_active = { type = "bool", format = "bool" }
+is_active = { type = "bool", format = "bool" }   # true if IDP provides explicit is_active; defaults to true when no IDP record exists in the linked cluster
 created_ts = { type = "string", format = "iso", nullable = true }
 updated_ts = { type = "string", format = "iso", nullable = true }
 
