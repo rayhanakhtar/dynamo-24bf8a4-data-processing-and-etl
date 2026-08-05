@@ -117,6 +117,28 @@ tie_break_secondary = "email_lexicographic"
 [keys]
 gid_order = ["IDP", "CRM", "CAT", "MRK", "STORE", "PAY"]
 
+# -----------------------------------------------------------------------------
+# SURROGATE KEYS (customer_key, order_key, payment_key, history_key) —
+# ASSIGNED SEQUENTIALLY STARTING AT 1 AFTER A DETERMINISTIC SORT.
+# For every canonical output, the records are sorted ascending on the declared
+# tie-breaking order below and then each row is numbered 1..N in that exact
+# sorted order. The `sort` declared on each output is the same as (or a
+# consequence of) this assignment order, so files are already in key order.
+#   customers:        ascending by gid
+#   orders:           ascending by (customer_key, placed_ts, source order id)
+#   payments:         ascending by (order_key, paid_ts, amount_cents)
+#   customer_history: ascending by (customer_key, attribute, effective_from)
+# Tie-breaking is done by the secondary/tertiary keys in the order written
+# above; the final key in each ordering is unique, so the sequence is total.
+# -----------------------------------------------------------------------------
+[keys.surrogate]
+assign_after = "deterministic_ascending_sort"
+start_at = 1
+customers = ["gid"]
+orders = ["customer_key", "placed_ts", "source_order_id"]
+payments = ["order_key", "paid_ts", "amount_cents"]
+customer_history = ["customer_key", "attribute", "effective_from"]
+
 [payment_linkage]
 primary = "order_reference"
 erp_invoice_lookup = "invoice"
@@ -539,7 +561,7 @@ include_details = true
 [metrics]
 records_processed = "sum over sources of valid_rows_read"
 records_rejected = "sum over sources of (raw_rows_read - rows_kept_after_parse)"
-duplicate_entities_merged = "count(distinct_source_identities) - count(final.customers)"
+duplicate_entities_merged = "max(0, count(entity clusters that resolve to a canonical customer) - count(final.customers)); each resolved cluster yields exactly one customer, so this is always 0"
 foreign_keys_repaired = "count(fk : resolves_to_master_key AND raw_value != canonical_value)"
 malformed_timestamps_corrected = "count(ts : parseable_only_via_secondary_format OR recovered_broken_iso)"
 null_values_imputed = "count(cell : final_value_sourced_from_higher_priority_source)"

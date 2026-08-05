@@ -13,5 +13,3 @@ Entity resolution must be deterministic: identical real-world customers spread a
 `/app/output/data_quality_report.json` must be a JSON object with `number_type = "int"`, `key_order = "sorted"`, `include_details = true`, and a `metrics` object containing every metric defined in `[metrics]` of the dictionary. Each metric must be an integer and must be consistent with the actual contents of the CSV files you produce (e.g. `final_customer_count` must equal the number of rows in `customers.csv`).
 
 The pipeline is deterministic: the same inputs must always produce byte-identical outputs. Do not invent values — any field that cannot be resolved from the source data must be empty.
-
-You have 3600 seconds to complete this task. Do not cheat by using online solutions or hints specific to this task.
