@@ -1,0 +1,17 @@
+{
+  "include_details": true,
+  "key_order": "sorted",
+  "metrics": {
+    "duplicate_entities_merged": 0,
+    "final_customer_count": 400,
+    "final_order_count": 698,
+    "final_payment_count": 708,
+    "foreign_keys_repaired": 9,
+    "malformed_timestamps_corrected": 15,
+    "null_values_imputed": 6177,
+    "records_processed": 6414,
+    "records_rejected": 9,
+    "referential_integrity_violations": 0
+  },
+  "number_type": "int"
+}

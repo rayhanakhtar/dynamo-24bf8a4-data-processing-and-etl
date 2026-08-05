@@ -1,0 +1,6 @@
+txn_id,customer_ref,order_reference,processed_at,amount_cents,currency,method,status
+# export generated 2024-08-01
+# gateway: northstar-pay
+
+txn_fac243c9,cus_c8367caf,,2024-08-02T09:15:21Z,-28040,CAD,klarna,partially_refunded
+,cus_bad01,or_000000000001,2024-01-06T10:00:00Z,500,USD,card,succeeded

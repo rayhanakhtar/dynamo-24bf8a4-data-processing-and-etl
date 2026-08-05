@@ -1,0 +1,4 @@
+invoice_no,customer_internal_id,bill_to,total_cents,currency,issue_date
+inv_1dddf55a,68373,Daniel Perez,124682,CAD,08/01/2024
+inv_9be1cbf2,71525,Ava Thompson,111958,USD,08/02/2024
+inv_447f974a,17662,Margaret Rodriguez,111581,USD,08/03/2024

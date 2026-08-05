@@ -1,0 +1,4 @@
+shipment_no,invoice_no,ship_date,carrier,tracking_no,deliver_to
+shp_6d66d196,inv_1dddf55a,08/01/2024,FedEx,1Z2400230889692396,Daniel Perez
+shp_7bd6344b,inv_9be1cbf2,08/02/2024,UPS,94009993263003418586,Ava Thompson
+shp_e1230931,inv_447f974a,08/03/2024,USPS,1Z0070563513344178,Margaret Rodriguez

@@ -1,38 +1,47 @@
-artifacts = []  # paths the verifier reads from the agent (e.g. ["/app/output.json"]) — must be above the first [section]
+artifacts = [
+    "/app/output/customers.csv",
+    "/app/output/orders.csv",
+    "/app/output/payments.csv",
+    "/app/output/customer_history.csv",
+    "/app/output/data_quality_report.json",
+]
 
 [task]
-name = "dynamo/your-task-name"  # required format: org/name (Harbor needs the slash); name part lowercase kebab-case, <=3 words
-description = ""                 # one-line summary of the task
+name = "dynamo/northstar-etl-consolidation"
+description = "Consolidate eight degraded customer/order/payment source exports into one canonical, deterministically-sorted ETL output with an SCD history and a data-quality report."
 
 [metadata]
 # --- Pre-seeded for you when this repo was created — DO NOT EDIT ---
-category = "Data Processing and ETL"                      # diversity category, assigned to your task by the Dynamo team
-subcategory = "ETL Pipelines"                   # diversity subcategory, assigned by the Dynamo team
+category = "Data Processing and ETL"
+subcategory = "ETL Pipelines"
 # --- Fixed for this dataset — LEAVE AS-IS ---
-model_tested = "Opus-4.8"           # difficulty-benchmarking model (do not change)
-agent_tested = "Terminus-2"        # difficulty-benchmarking agent (do not change)
+model_tested = "Opus-4.8"
+agent_tested = "Terminus-2"
 # --- You fill these in ---
-# task_objective / artifact_type: pick from .dynamo/diversity-taxonomy.toml (lowercase snake_case).
-task_objective = []                # e.g. ["implement", "debug"]
-artifact_type = []                 # e.g. ["codebase", "configuration_file"]
-expert_time_estimate_hours = 0     # best-case hours for a focused domain expert with the intended insight
-difficulty_explanation = ""        # why this task is hard for agents and humans
-solution_explanation = ""          # high-level approach and key insights
-verification_explanation = ""      # how the tests verify correctness
+task_objective = ["implement", "transform"]
+artifact_type = ["dataset_or_tabular_file", "generated_output_artifact"]
+expert_time_estimate_hours = 8.0
+difficulty_explanation = """
+The agent must build a production-grade entity-consolidation ETL from scratch: eight heterogeneous source exports (CSV/NDJSON, relational splits, nested month folders, header drift, renamed columns) containing deliberate corruption (malformed rows, bad timestamps in five parse formats, obsolete and missing FK references, duplicate rows, stale snapshots). The hard part is not any single step but the cascading chain: robust per-source parsing, per-attribute normalization (E.164 phones, lowercase emails, title-cased names, uppercase postal codes), deterministic record linkage that merges the same real-world customer across sources (strong email/phone edges plus weak composite matching with source-priority and lexical tie-breaks), global canonical-id assignment, per-attribute precedence merging, payment-to-order linkage (exact order/ERP-invoice references plus an amount-currency-time-snapshot fallback), slow-changing-dimension history reconstruction, and a fully consistent quality report whose metrics must match the emitted files exactly. Errors compound: a merge or a precedence decision changes ids, which changes history and every downstream count, and the final output must be byte-identical to the oracle. This is exactly the multi-system data-integration work a data engineer is paid to do, and the data is synthetic but realistically degraded so no memorized textbook pipeline applies directly.
+"""
+solution_explanation = """
+Parse every source with a tolerant reader (NDJSON per-line JSON, CSV with comment/blank skipping and header drift handling), normalizing each field on intake (email lowercased+trimmed, phone to E.164, names title-cased, postal uppercase, money to integer cents, timestamps via the dictionary's left-to-right parse-order with ISO-Z output). Count every unparseable row as rejected. Build identity nodes per source record and union-find strong edges on exact email/phone, then add weak composite edges (name+postal, or first_name+postal+dob) between components; assign each cluster a canonical gid by the global source-priority rule (IDP > CRM > CAT > MRK > STORE > PAY). Merge attributes per-attribute by taking the highest-priority source supplying a valid value. Resolve orders from STORE by email→customer, match ERP invoices to orders on (bill_to, total, currency, issue_date), and resolve each payment to an order by order_reference (or_/inv_) with an amount+currency+time-snapshot fallback, dropping unresolvable references and deduplicating exact duplicates. Number customers/orders/payments contiguously after deterministic sorting, compute per-order USD and reconciliation, reconstruct SCD history by comparing stale vs current exposures for the four changeable attributes, and emit every [metrics] integer from parse/link/assemble counts so the report is self-consistent with the files.
+"""
+verification_explanation = """
+The verifier reads only the five output artifacts in /app/output (declared in task.toml artifacts) and the public dictionary at /app/config/dictionary.toml, comparing them against committed oracle fixtures in /tests/expected. Each artifact has its own test module: byte-for-byte equality with the fixture (proves determinism and exact correctness), schema/column-order match against the dictionary, deterministic ascending sort per the declared sort columns, unique contiguous primary keys, unique canonical ids, per-cell format validation (ISO timestamps, lowercase email, E.164 phone, uppercase postal codes, integer money), and cross-artifact integrity (orders reference customers, payments reference orders, completed orders reconcile to payments in USD, report final_* counts equal actual row counts, every metric is an integer and exactly equals the fixture). No tolerance is used — every check is exact equality against a deterministically-generated oracle, so any deviation from the spec fails.
+"""
 
 [verifier]
-timeout_sec = 120.0                # increase based on your test suite's runtime demands
-# Canonical TB2: the verifier runs in the environment image (no separate tests/Dockerfile).
-# Harbor overlays tests/ at verify time; leave environment_mode unset for this shared model.
+timeout_sec = 300.0
 
 [agent]
-timeout_sec = 120.0                # raise for hard tasks — agents may run for many minutes or hours
+timeout_sec = 3600.0
 
 [environment]
-build_timeout_sec = 600.0          # max seconds for the Docker build
-cpus = 1                           # increase for parallel/compute-heavy workloads
-memory_mb = 2048                   # increase for large datasets or in-memory processing
-storage_mb = 10240                 # increase for tasks with large files or build artifacts
-gpus = 0                           # max 1, expect H100
-allow_internet = true              # open internet is available to the agent
-mcp_servers = []                   # optional MCP servers to expose to the agent
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+allow_internet = true
+mcp_servers = []

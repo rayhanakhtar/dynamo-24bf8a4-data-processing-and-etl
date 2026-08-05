@@ -1,0 +1,36 @@
+txn_id,customer_ref,order_reference,created_ts,amount_cents,currency,method,status
+# export generated 2024-08-01
+# gateway: northstar-pay
+
+txn_4d7dcadb,cus_8ce4beab,or_4acd01c0e021,2023-04-29T03:50:50Z,72534,USD,card,processing
+txn_cd9b28cb,cus_ef009cb5,or_3ad7ed679e13,2023-04-20T23:15:23Z,76667,USD,card,succeeded
+txn_9d6e75b4,cus_6b736e6b,or_12b41aea100f,2023-04-24T03:06:17Z,77303,USD,klarna,succeeded
+txn_f5b19920,cus_6b736e6b,inv_abfc11fc,2023-04-28T03:06:17Z,-10750,USD,klarna,partially_refunded
+txn_9edd8340,cus_2c7d557d,or_016c56b66f68,2023-04-25T17:17:17Z,121814,USD,card,succeeded
+txn_cf605d62,cus_17eef819,or_761c16ad2879,2023-04-26T21:09:41Z,98879,USD,card,succeeded
+txn_ede7e284,cus_1f3ce496,or_d0f4833ff98e,2023-04-21T13:22:46Z,3652,USD,apple_pay,succeeded
+txn_7f645ca2,cus_c3b85b99,inv_a220849f,2023-04-16T06:30:42Z,91621,USD,bank,succeeded
+txn_c38cc1ab,cus_bbb7292f,or_464595e533aa,2023-04-08T16:00:43Z,53844,USD,card,succeeded
+txn_0695ac8c,cus_cdf29eea,or_97cc6184005e,2023-04-18T09:27:45Z,25273,USD,apple_pay,succeeded
+txn_fcc812bf,cus_ddc6af74,or_7f244c2a9755,2023-04-26T16:51:36Z,36745,USD,bank,succeeded
+txn_a87fb1cf,cus_c8367caf,or_e30e6ac5a3bd,2023-04-20T20:25:46Z,100871,USD,bank,succeeded
+txn_1137c2ea,cus_4be09b7b,or_8531e29c8ddb,2023-04-11T11:26:07Z,77626,USD,bank,succeeded
+txn_f9afb061,cus_e951d524,or_5698744673c8,2023-04-18T20:56:44Z,44714,CAD,bank,succeeded
+txn_cf27cf13,cus_836a6a11,,2023-04-11T15:58:08Z,23647,USD,bank,succeeded
+txn_3208ba34,cus_f8b10d65,or_25afba380b43,2023-04-06T05:29:38Z,88736,CAD,card,succeeded
+txn_74f4915c,cus_279502a0,or_504b9d736928,2023-04-27T00:29:39Z,94072,USD,bank,succeeded
+txn_eb866ead,cus_acfde632,or_0251725f844a,2023-04-20T11:50:41Z,19648,USD,klarna,succeeded
+txn_e34f8cdd,cus_3dd507fc,or_3cd93967d592,2023-04-22T12:46:10Z,27638,USD,card,succeeded
+txn_03fa8f41,cus_5cf2b384,or_408c59099b0b,2023-04-08T17:42:50Z,108144,USD,card,succeeded
+txn_886fd023,cus_ee54ac1b,or_908d34f3f5b5,2023-04-11T05:12:50Z,37752,USD,klarna,succeeded
+txn_71b2331b,cus_7f7ef91c,or_97d57b7cc2ff,2023-04-02T03:48:25Z,6764,USD,klarna,succeeded
+txn_66eb3e73,cus_6c79ba87,or_dc8132b18608,2023-04-11T03:47:46Z,5666,USD,klarna,succeeded
+txn_8b65972d,cus_3019c9ec,or_d07806f38237,2023-04-15T07:51:34Z,45014,USD,klarna,succeeded
+txn_a3252c10,cus_0c0bcdf3,or_855ef49ba984,2023-04-20T08:55:04Z,97053,USD,bank,succeeded
+txn_5af13af8,cus_a7c19e92,or_a6a517ea0604,2023-04-10T00:28:35Z,13356,USD,bank,succeeded
+txn_562fa949,cus_8f72a0eb,or_adf5694940c7,2023-04-16T06:54:09Z,101815,USD,apple_pay,succeeded
+txn_48308b2b,cus_7cbe6a78,or_9671e831abed,2023-04-01T21:46:43Z,111430,USD,apple_pay,processing
+txn_895cad3d,cus_5b764619,or_4ec7f6f522e6,2023-04-29T15:41:42Z,40027,USD,card,succeeded
+txn_d121b6d0,cus_c94e54f0,or_35768e0f5d14,2023-04-11T02:38:07Z,30926,USD,apple_pay,succeeded
+txn_3a3be886,cus_1b38e6a9,inv_6f739e06,2023-04-01T04:10:44Z,-63639,USD,card,refunded
+txn_2b21adbe,cus_40aff187,or_d1c99813cbf3,2023-04-09T04:18:50Z,63464,USD,apple_pay,succeeded

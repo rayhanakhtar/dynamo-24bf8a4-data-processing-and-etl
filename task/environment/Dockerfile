@@ -1,23 +1,32 @@
-# The single container image — built for BOTH the agent run and the verifier (canonical
-# TB2: there is no separate tests/Dockerfile). Install every system dependency / package
-# the task needs here, plus the verifier's deps (pytest). Do NOT COPY solution/ or tests/
-# into this image — Harbor overlays tests/ at /tests only at verify time, so ground truth
-# stays out of the agent's reach.
+# Single container image — built for BOTH the agent run and the verifier (canonical
+# TB2: no separate tests/Dockerfile). Baked in here: the task's runtime deps AND the
+# verifier's deps (pytest), so tests/test.sh installs nothing at verify time.
 #
-# apt tips: don't pin apt versions (they go stale); run `apt-get update` before
-# install; clean up with `rm -rf /var/lib/apt/lists/*` in the same RUN layer.
-# Data: put input files in environment/data/ and copy them in (e.g. COPY data /app/data).
-# Never put solution or test/ground-truth data here — the agent can read it.
-FROM public.ecr.aws/docker/library/ubuntu:24.04@sha256:0d39fcc8335d6d74d5502f6df2d30119ff4790ebbb60b364818d5112d9e3e932
+# We do NOT COPY solution/ or tests/ into this image — the oracle solution and the
+# expected fixtures are only overlaid/mounted by Harbor, so ground truth stays out of
+# the agent's reach.
+#
+# Base: pre-approved, digest-pinned python image (>= 3.11). The task uses only the
+# Python standard library (tomllib, csv, json, dataclasses), so no runtime apt/pip deps
+# are needed beyond pytest for the verifier.
+FROM public.ecr.aws/docker/library/python:3.13-slim-bookworm@sha256:01f42367a0a94ad4bc17111776fd66e3500c1d87c15bbd6055b7371d39c124fb
 
-# Verifier deps, baked at BUILD time (pinned) so the verifier installs nothing at verify time.
-RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-pip \
-    && pip install --no-cache-dir --break-system-packages pytest==8.4.1 pytest-json-ctrf==0.3.5 \
+# Verifier tooling, baked at BUILD time (pinned) — the verifier installs nothing at
+# verify time.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        bash \
+    && pip install --no-cache-dir pytest==8.4.1 pytest-json-ctrf==0.3.5 \
     && rm -rf /var/lib/apt/lists/*
 
-# Example (task-specific system packages / input data):
-# RUN apt-get update && apt-get install -y --no-install-recommends <packages> \
-#     && rm -rf /var/lib/apt/lists/*
-# COPY data /app/data
+# Public benchmark inputs the agent is allowed to see:
+#   /app/data/              the eight degraded source exports (STORE, PAY, CRM, ERP,
+#                           IDP, SUP, MRK, CAT)
+#   /app/config/dictionary.toml   the normative public rules (schemas, sorting, ids,
+#                           normalization) that define the canonical outputs
+COPY data /app/data
+COPY config /app/config
+
+# The agent writes its consolidated outputs here.
+RUN mkdir -p /app/output
 
 WORKDIR /app

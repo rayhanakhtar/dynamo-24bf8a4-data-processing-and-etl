@@ -1,17 +1,30 @@
-<!--
-  This file is the PROMPT handed verbatim to the model that will attempt your task.
-  Replace everything in this comment with your task instruction, then delete the comment.
+You are consolidating customer, order, and payment data from eight degraded source systems into a single canonical view for the Northstar Commerce platform.
 
-  Guidelines:
-  - Write it yourself, as a domain expert. Do NOT generate it with an LLM.
-  - It's a prompt, not a document — no title, no section headers, no excessive Markdown.
-  - Write it the way you'd brief a skilled colleague.
-  - Use absolute paths (e.g. /app/output.txt), never relative paths.
-  - Be explicit about every expected output file and its exact format/schema.
-  - Include everything the agent needs to solve the task — and nothing more (don't
-    hint at or reveal your solution).
-  - Keep it concise (<= 1500 tokens). State the goal and required outputs; skip
-    backstory, roleplay, and filler.
--->
+# Input
 
-Replace this file with your task instruction.
+All source data is under `/app/data/`. Each source system has its own directory (`store`, `pay`, `crm`, `erp`, `idp`, `support`, `marketing`, `retail`) containing CSV or NDJSON exports of varying quality. The files contain intentional corruption you must handle: malformed JSON/CSV rows, wrong column counts, unparseable or inconsistent timestamps, obsolete/missing foreign-key references, duplicate rows, and renamed or inconsistent column values.
+
+The single source of truth for every rule is `/app/config/dictionary.toml`. It is the normative specification and defines, for each source system: the exported fields, their types and roles, and the identifier format. It also defines, for the canonical output: the exact output schema (column names, order, types, and formats), primary keys, sort order, currency conversion and rounding, datetime parse order and output format, normalization rules, entity-matching/precedence rules, the global identifier precedence, payment-to-order linkage, customer-history reconstruction, the published metrics, and the invariants every correct output must satisfy. Implement the pipeline so that your outputs conform to this specification exactly.
+
+# Output
+
+Write exactly these five files into `/app/output/`:
+
+- `/app/output/customers.csv`
+- `/app/output/orders.csv`
+- `/app/output/payments.csv`
+- `/app/output/customer_history.csv`
+- `/app/output/data_quality_report.json`
+
+# Rules
+
+- The columns of each CSV, in their exact order, the primary keys, and the required row-sort order are declared in `[outputs]` in `/app/config/dictionary.toml`. Your files must use exactly those columns, in that order, and be sorted ascending by the declared sort columns.
+- Primary keys must be unique, non-empty, and numbered contiguously starting at 1.
+- Money must be stored as integer minor units (cents), including negative values for refunds.
+- All timestamps must be emitted as UTC ISO-8601 with `Z` suffix, format `YYYY-MM-DDTHH:MM:SSZ`.
+- Emails must be lowercase; phone numbers must be normalized E.164 (`+...`); postal codes, region, and country must be uppercase.
+- Entity resolution must be deterministic: identical real-world customers spread across sources must be merged into one canonical record, and the canonical id for a merged entity must follow the global source-priority rule in the dictionary. Records that cannot be parsed or that reference entities that do not exist must never appear in the output.
+- Orders and payments must link to the customer and order they belong to; completed orders must reconcile exactly to their payments in USD, and every payment must reference an existing order.
+- `/app/output/data_quality_report.json` must be a JSON object with `number_type = "int"`, `key_order = "sorted"`, `include_details = true`, and a `metrics` object containing every metric defined in `[metrics]` of the dictionary. Each metric must be an integer and must be consistent with the actual contents of the CSV files you produce (e.g. `final_customer_count` must equal the number of rows in `customers.csv`).
+
+The pipeline is deterministic: the same inputs must always produce byte-identical outputs. Do not invent values — any field that cannot be resolved from the source data must be empty.

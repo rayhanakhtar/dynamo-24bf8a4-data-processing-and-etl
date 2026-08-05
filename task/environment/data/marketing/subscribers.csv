@@ -1,0 +1,340 @@
+profile_id,email,first,last,consent_email,consent_sms,opt_in_ts,list,postal_code
+mk_42afeb2f,emily.carter_563@icloud.com ,Emily,Carter,false,true,2019-12-08T14:44:00Z,prospects,16263
+mk_7da1ed26,DAVID.BROWN530@GMAIL.COM,David,Brown,true,false,2019-07-14T08:20:00Z,newsletter,55764
+mk_6c99568b,noah.thompson666@outlook.com ,Noah,Thompson,false,true,2022-09-28T19:37:00Z,loyalty,05406
+mk_4df96313, JOSEPH.ROBINSON@YAHOO.COM ,Joseph,Robinson,true,true,2020-07-21T12:11:00Z,newsletter,86356
+mk_bb20a8d7,AMELIA.SANCHEZ.422@YAHOO.COM ,Amelia,Sanchez,true,false,2018-05-23T18:42:00Z,prospects,03361
+mk_b54b5707, joseph.moore.133@outlook.com ,Joseph,Moore,true,true,2020-06-23T13:38:00Z,prospects,35391
+mk_bef2f5ec,AMELIA.LOPEZ93@ICLOUD.COM ,Amelia,Lopez,true,false,2020-11-26T11:26:00Z,newsletter,25151
+mk_33f239a9, grace.garcia-629@gmail.com ,Grace,Garcia,false,true,2023-04-05T12:29:00Z,newsletter,72942
+mk_79e04e61,JOSEPH.MOORE-245@GMAIL.COM,Joseph,Moore,true,false,2023-06-03T20:47:00Z,prospects,20624
+mk_e6bfc3f4,JESSICA.HERNANDEZ@GMAIL.COM,Jessica,Hernandez,true,false,2017-02-12T18:47:00Z,prospects,40455
+mk_8a7759f6,NOAH.ALLEN_498@HOTMAIL.COM,Noah,Allen,true,false,,newsletter,32468
+mk_a49242d7, AVA.WALKER.687@ICLOUD.COM ,Ava,Walker,true,false,2018-01-05T09:47:00Z,newsletter,30565
+mk_34a2e296,MARK.PEREZ.593@OUTLOOK.COM ,Mark,Perez,true,false,2020-10-05T20:13:00Z,loyalty,64341
+mk_0aad9cb1, lucas.lewis@icloud.com ,Lucas,Lewis,false,false,2022-07-16T18:44:00Z,newsletter,92551
+mk_c35bbb6b, NOAH.PEREZ476@OUTLOOK.COM ,Noah,Perez,true,false,2019-07-05T10:22:00Z,prospects,05404
+mk_80a05def, patricia.ramirez_971@outlook.com ,Patricia,Ramirez,true,true,2022-05-07T14:36:00Z,prospects,02601
+mk_58129d66,SARAH.BROOKS-732@ICLOUD.COM ,Sarah,Brooks,true,true,2018-02-06T09:00:00Z,loyalty,87297
+mk_a3e2932a, thomas.robinson.589@hotmail.com ,Thomas,Robinson,true,false,2017-09-18T13:45:00Z,newsletter,78458
+mk_d9ac8110,JOSEPH.LEE825@GMAIL.COM,Joseph,Lee,true,true,,loyalty,11287
+mk_78d5449b,MARGARET.KING@ICLOUD.COM,Margaret,King,true,false,2023-02-12T13:56:00Z,prospects,79908
+mk_953c1377,patricia.young_223@icloud.com,Patricia,Young,true,false,2017-01-08T19:30:00Z,newsletter,32729
+mk_03488e84,lisa.hall_16@outlook.com ,Lisa,Hall,true,true,2023-10-05T18:49:00Z,newsletter,18308
+mk_af2367bf,NOAH.KING_949@HOTMAIL.COM ,Noah,King,false,true,2023-02-06T12:25:00Z,loyalty,85191
+mk_1ecd73b1, AMELIA.WRIGHT948@GMAIL.COM ,Amelia,Wright,true,true,,newsletter,35126
+mk_8a4b1be9,CHARLES.RODRIGUEZ-986@YAHOO.COM ,Charles,Rodriguez,true,false,2019-07-04T12:30:00Z,loyalty,36922
+mk_5c17e168,daniel.davis636@yahoo.com ,Daniel,Davis,false,false,2022-12-16T17:23:00Z,prospects,56915
+mk_8131597f,noah.garcia.837@icloud.com ,Noah,Garcia,true,true,,prospects,38526
+mk_28d7193e,CHARLES.WRIGHT292@OUTLOOK.COM ,Charles,Wright,true,false,2020-07-25T16:57:00Z,newsletter,82984
+mk_eab8a31b,lisa.miller_406@hotmail.com,Lisa,Miller,true,true,,prospects,72935
+mk_db84f8ac,ava.lewis_751@hotmail.com ,Ava,Lewis,true,false,2017-06-17T20:02:00Z,loyalty,22247
+mk_165a23de,MARY.GONZALEZ_845@ICLOUD.COM ,Mary,Gonzalez,true,false,2022-10-18T16:16:00Z,loyalty,92749
+mk_7ecc9364,mason.thompson.747@hotmail.com ,Mason,Thompson,true,false,,prospects,18653
+mk_a56993fd,prior.amelia.carter.126@hotmail.com,Amelia,Carter,true,true,2022-02-27T11:18:00Z,newsletter,15176
+mk_866a6761,EMILY.KING.73@GMAIL.COM,Emily,King,true,false,2018-07-07T18:22:00Z,newsletter,31472
+mk_4d63478d,matthew.quinn.197@gmail.com,Matthew,Quinn,true,true,2018-10-02T19:38:00Z,loyalty,26139
+mk_bd20086e,EMMA.JOHNSON47@HOTMAIL.COM ,Emma,Johnson,true,false,2021-11-05T13:39:00Z,newsletter,73207
+mk_ba2c49ed, david.wright883@outlook.com ,David,Wright,false,false,2023-12-02T09:47:00Z,loyalty,26464
+mk_944b98b3,william.robinson_659@gmail.com ,William,Robinson,true,true,2023-12-17T11:50:00Z,loyalty,67926
+mk_2fa9133d,mason.lee504@icloud.com ,Mason,Lee,true,true,2020-04-23T13:00:00Z,loyalty,58496
+mk_98f5e2f3,BARBARA.MILLER-573@OUTLOOK.COM ,Barbara,Miller,true,true,2022-02-22T14:32:00Z,loyalty,81555
+mk_a7da206f,DANIEL.LOPEZ@YAHOO.COM ,Daniel,Lopez,true,true,2018-12-05T20:16:00Z,prospects,36337
+mk_facfd109,EMMA.SANCHEZ_847@YAHOO.COM ,Emma,Sanchez,true,false,,loyalty,57254
+mk_44d7c633, AMELIA.HAYES@ICLOUD.COM ,Amelia,Hayes,true,false,2022-09-12T11:47:00Z,loyalty,63805
+mk_4760db37, mason.walker@hotmail.com ,Mason,Walker,true,false,2019-08-12T13:37:00Z,prospects,20661
+mk_055ea912,PATRICIA.MILLER@OUTLOOK.COM,Patricia,Miller,true,true,,prospects,10196
+mk_8987b4e1, CHARLES.CARTER.666@GMAIL.COM ,Charles,Carter,true,true,,loyalty,24737
+mk_38c82c9c, JAMES.KING-895@YAHOO.COM ,James,King,true,false,,loyalty,62114
+mk_f13d5ab7, ava.lee678@icloud.com ,Ava,Lee,true,false,2019-10-28T08:00:00Z,newsletter,32173
+mk_9b597549, mark.smith-491@gmail.com ,Mark,Smith,true,false,2023-02-08T16:00:00Z,loyalty,15585
+mk_fc303212,linda.anderson186@gmail.com ,Linda,Anderson,true,false,,prospects,97421
+mk_4ade20af,ava.johnson337@icloud.com,Ava,Johnson,true,true,2017-02-23T08:46:00Z,loyalty,40435
+mk_9b0d26d1, nancy.perez290@yahoo.com ,Nancy,Perez,true,false,2020-07-07T19:51:00Z,newsletter,19132
+mk_5fddb7c7,WILLIAM.BROWN-778@YAHOO.COM,William,Brown,false,true,,loyalty,06253
+mk_4823c2f2,mary.martinez@yahoo.com,Mary,Martinez,true,true,2023-06-09T16:30:00Z,newsletter,80124
+mk_dc2d56d8,MARY.REED_316@OUTLOOK.COM,Mary,Reed,true,false,2023-03-05T19:33:00Z,loyalty,78957
+mk_d3ff6540, sarah.smith.318@icloud.com ,Sarah,Smith,true,false,2022-08-12T15:21:00Z,newsletter,88691
+mk_5a844cca,charles.thompson.134@gmail.com ,Charles,Thompson,true,false,2022-05-15T10:24:00Z,newsletter,42217
+mk_89e46d47, patricia.brooks.791@yahoo.com ,Patricia,Brooks,true,true,2017-07-08T10:17:00Z,newsletter,51421
+mk_580a853c, william.wilson.650@gmail.com ,William,Wilson,true,true,2021-04-01T14:40:00Z,loyalty,10504
+mk_9ff003f2,linda.martinez_713@hotmail.com ,Linda,Martinez,true,true,2023-04-21T12:06:00Z,prospects,67142
+mk_7c8056f8, LISA.QUINN@ICLOUD.COM ,Lisa,Quinn,true,false,2020-01-27T20:58:00Z,prospects,44285
+mk_0a52f07a,charles.wright.526@hotmail.com ,Charles,Wright,true,false,,newsletter,81189
+mk_d6d951ba,prior.liam.lee@yahoo.com ,Liam,Lee,true,false,2022-07-01T17:19:00Z,loyalty,39606
+mk_465e43ed,JAMES.GARCIA861@ICLOUD.COM ,James,Garcia,false,true,2017-03-02T20:52:00Z,newsletter,36193
+mk_7b39bb65, PATRICIA.HALL-763@GMAIL.COM ,Patricia,Hall,true,true,2018-10-20T18:16:00Z,newsletter,19109
+mk_50bf1004, jessica.quinn@icloud.com ,Jessica,Quinn,true,false,,prospects,54826
+mk_30210251, lucas.martinez74@icloud.com ,Lucas,Martinez,true,false,2018-04-11T17:15:00Z,prospects,23543
+mk_f3fb9201,JAMES.THOMPSON@ICLOUD.COM ,James,Thompson,true,true,2020-11-20T20:28:00Z,newsletter,60771
+mk_a5a073ae, GRACE.YOUNG_22@ICLOUD.COM ,Grace,Young,false,true,2020-02-04T14:53:00Z,loyalty,40352
+mk_c5445e6a,BARBARA.LEWIS796@OUTLOOK.COM ,Barbara,Lewis,false,true,2017-07-19T10:07:00Z,newsletter,17658
+mk_7c5cd4bd,MASON.MILLER-570@HOTMAIL.COM,Mason,Miller,true,true,2018-11-09T20:51:00Z,prospects,67601
+mk_f0e97fe9,LINDA.THOMPSON_601@ICLOUD.COM,Linda,Thompson,true,true,2017-12-19T19:04:00Z,loyalty,06602
+mk_60e07a77,MICHAEL.BROWN347@YAHOO.COM ,Michael,Brown,true,true,2018-11-19T16:02:00Z,loyalty,20335
+mk_15c518e2, sarah.clark_789@hotmail.com ,Sarah,Clark,true,true,2021-02-09T19:58:00Z,loyalty,67888
+mk_905937e7, DAVID.WALKER@HOTMAIL.COM ,David,Walker,true,false,,loyalty,51486
+mk_dddec435,GRACE.QUINN.185@YAHOO.COM,Grace,Quinn,false,true,2017-12-24T18:53:00Z,loyalty,87411
+mk_e718f648,prior.anthony.williams_611@icloud.com,Anthony,Williams,true,true,2023-07-09T08:21:00Z,loyalty,82129
+mk_8cc0619c, prior.joseph.clark395@icloud.com ,Joseph,Clark,true,false,2021-07-27T10:43:00Z,loyalty,23579
+mk_b7d0571c, margaret.allen-429@hotmail.com ,Margaret,Allen,false,false,2022-07-24T09:57:00Z,loyalty,73268
+mk_d1a65793,THOMAS.TAYLOR788@GMAIL.COM ,Thomas,Taylor,true,false,,prospects,32591
+mk_4b2e0e68, ETHAN.WRIGHT@HOTMAIL.COM ,Ethan,Wright,true,false,2022-05-16T18:11:00Z,loyalty,94165
+mk_bb4a3fc3, SARAH.CARTER897@ICLOUD.COM ,Sarah,Carter,true,false,2022-04-08T08:52:00Z,loyalty,44163
+mk_ebe7fc4a, DANIEL.DAVIS-658@OUTLOOK.COM ,Daniel,Davis,true,false,2023-08-10T14:34:00Z,prospects,08458
+mk_9af60a23,DAVID.HALL.965@HOTMAIL.COM,David,Hall,true,false,2021-11-08T10:50:00Z,prospects,80921
+mk_b8ae9735,jordan.lewis@icloud.com,Jordan,Lewis,true,false,2023-04-09T18:06:00Z,prospects,49499
+mk_f86f6a57,nancy.thomas_566@yahoo.com ,Nancy,Thomas,true,false,2019-02-02T15:58:00Z,prospects,64273
+mk_e4e9fac8, margaret.carter655@gmail.com ,Margaret,Carter,true,false,2018-05-10T18:13:00Z,loyalty,79731
+mk_692f789b,LIAM.WALKER@OUTLOOK.COM ,Liam,Walker,true,false,2022-05-12T16:47:00Z,newsletter,38207
+mk_173fe638,CHRISTOPHER.SMITH.297@OUTLOOK.COM,Christopher,Smith,true,true,2018-10-22T10:30:00Z,loyalty,70635
+mk_a78bf7e5,LISA.JONES@OUTLOOK.COM,Lisa,Jones,true,true,2020-02-18T12:17:00Z,newsletter,95338
+mk_77b1bc13,charles.gonzalez-4@outlook.com,Charles,Gonzalez,true,false,2022-04-24T10:20:00Z,loyalty,51785
+mk_ca380c78, LINDA.MILLER@YAHOO.COM ,Linda,Miller,true,true,2019-06-01T17:47:00Z,newsletter,54224
+mk_87fd6074, PRIOR.EMMA.THOMPSON@GMAIL.COM ,Emma,Thompson,true,false,2021-05-19T11:50:00Z,prospects,66769
+mk_da8104e3,mary.thomas-882@hotmail.com,Mary,Thomas,true,false,2021-06-03T20:09:00Z,loyalty,88279
+mk_1e9ee779,AVA.MARTIN.323@ICLOUD.COM,Ava,Martin,true,false,2017-11-13T08:38:00Z,prospects,07653
+mk_fa746861,JENNIFER.CLARK575@GMAIL.COM ,Jennifer,Clark,true,false,2021-11-12T20:13:00Z,prospects,75539
+mk_7b2c3078, LISA.YOUNG149@YAHOO.COM ,Lisa,Young,true,true,2021-09-24T14:15:00Z,prospects,40119
+mk_05ffb16f,LISA.HARRIS@OUTLOOK.COM,Lisa,Harris,true,false,2017-10-02T12:55:00Z,loyalty,65235
+mk_34df7a54, david.wilson_807@icloud.com ,David,Wilson,true,false,2021-03-16T13:40:00Z,loyalty,69767
+mk_5d209b89,WILLIAM.THOMAS@GMAIL.COM,William,Thomas,true,false,2019-10-04T17:35:00Z,loyalty,06732
+mk_caf2f709,LIAM.MARTINEZ-785@GMAIL.COM,Liam,Martinez,false,true,2023-09-16T10:39:00Z,prospects,28247
+mk_6b188155,DANIEL.PEREZ_621@HOTMAIL.COM,Daniel,Perez,true,true,2020-02-10T15:27:00Z,loyalty,05734
+mk_fad61d24,richard.quinn431@hotmail.com,Richard,Quinn,true,false,2021-06-21T13:05:00Z,prospects,85854
+mk_6b72330b,michael.hayes_314@outlook.com,Michael,Hayes,true,false,2018-05-09T09:48:00Z,newsletter,38916
+mk_a4dac327,PATRICIA.SANCHEZ@ICLOUD.COM ,Patricia,Sanchez,true,true,,loyalty,83572
+mk_b37fccf6, MICHAEL.JACKSON558@ICLOUD.COM ,Michael,Jackson,true,true,2021-11-24T09:46:00Z,newsletter,20823
+mk_de1e2de7,mark.rodriguez@outlook.com,Mark,Rodriguez,true,false,2019-10-25T11:30:00Z,newsletter,91215
+mk_b363a174,DAVID.DAVIS-47@OUTLOOK.COM ,David,Davis,true,false,2018-06-28T09:12:00Z,prospects,77943
+mk_2b5c1b5c, ethan.rodriguez@hotmail.com ,Ethan,Rodriguez,true,false,2021-11-23T14:53:00Z,prospects,74722
+mk_31558056,michael.lopez-265@hotmail.com,Michael,Lopez,true,true,2023-08-19T09:19:00Z,newsletter,81298
+mk_8eed9221, joseph.thompson@yahoo.com ,Joseph,Thompson,false,false,,newsletter,90887
+mk_3029d2b5,DAVID.CARTER@HOTMAIL.COM ,David,Carter,true,true,,prospects,30994
+mk_1bc29b5d, MASON.YOUNG.560@YAHOO.COM ,Mason,Young,false,true,2017-11-20T12:22:00Z,prospects,76292
+mk_cc70e7a7,NANCY.YOUNG_93@ICLOUD.COM ,Nancy,Young,true,false,2018-06-13T08:47:00Z,prospects,05919
+mk_049fc3a7,mary.thompson.988@hotmail.com ,Mary,Thompson,false,false,2022-03-19T08:03:00Z,newsletter,68785
+mk_1d14732f,james.hall-309@gmail.com ,James,Hall,false,false,2017-07-27T10:40:00Z,loyalty,60923
+mk_bd1f5982,emma.young@icloud.com,Emma,Young,true,true,2017-01-03T12:33:00Z,loyalty,57514
+mk_36cafb18,jordan.lopez.204@yahoo.com,Jordan,Lopez,false,false,2022-01-22T17:37:00Z,loyalty,84169
+mk_42213e56,OLIVIA.HAYES_432@HOTMAIL.COM ,Olivia,Hayes,true,false,2021-05-24T15:05:00Z,prospects,19541
+mk_71a0e143, MASON.WALKER_970@YAHOO.COM ,Mason,Walker,true,true,2023-04-26T15:00:00Z,newsletter,68273
+mk_970e5a98,ELIZABETH.JOHNSON614@YAHOO.COM ,Elizabeth,Johnson,true,false,2021-12-08T08:12:00Z,loyalty,93608
+mk_61302c70, ROBERT.CLARK260@OUTLOOK.COM ,Robert,Clark,true,false,2018-04-23T13:56:00Z,prospects,74142
+mk_e6d5671e, MATTHEW.GARCIA@ICLOUD.COM ,Matthew,Garcia,true,false,2019-11-24T18:15:00Z,newsletter,74229
+mk_bca913da,OLIVIA.TAYLOR_10@YAHOO.COM ,Olivia,Taylor,true,false,2017-04-28T12:04:00Z,loyalty,51275
+mk_55d89126,GRACE.SANCHEZ@ICLOUD.COM,Grace,Sanchez,true,true,2022-06-07T10:56:00Z,prospects,80459
+mk_9f65c372,william.hayes-312@icloud.com,William,Hayes,true,true,2019-12-17T19:51:00Z,newsletter,94563
+mk_0a276e41, MATTHEW.REED@GMAIL.COM ,Matthew,Reed,false,true,,prospects,07916
+mk_2777d5e1,JESSICA.REED_663@HOTMAIL.COM ,Jessica,Reed,true,false,,loyalty,55745
+mk_62d053ed, grace.walker.265@yahoo.com ,Grace,Walker,true,false,2019-07-02T12:16:00Z,newsletter,88358
+mk_886a67b7,CHRISTOPHER.MARTIN.109@ICLOUD.COM ,Christopher,Martin,true,false,2023-07-02T20:37:00Z,prospects,34631
+mk_46c94d46,SUSAN.RAMIREZ.154@OUTLOOK.COM ,Susan,Ramirez,true,false,2021-03-28T12:19:00Z,prospects,58753
+mk_cbcd57d2,daniel.allen@gmail.com,Daniel,Allen,false,false,2023-09-20T15:26:00Z,loyalty,37299
+mk_98ffb0a2, EMILY.LOPEZ.312@ICLOUD.COM ,Emily,Lopez,true,false,2021-04-09T08:54:00Z,loyalty,13144
+mk_c6cf7037,jessica.walker.383@gmail.com ,Jessica,Walker,true,true,2021-09-20T12:11:00Z,loyalty,25983
+mk_b0336733,matthew.walker-22@icloud.com ,Matthew,Walker,true,false,2019-01-02T18:44:00Z,newsletter,90418
+mk_a84b370f,NANCY.QUINN_210@OUTLOOK.COM ,Nancy,Quinn,true,false,2023-04-02T17:48:00Z,newsletter,37205
+mk_32515654, RICHARD.JACKSON.695@YAHOO.COM ,Richard,Jackson,true,true,2020-01-08T18:41:00Z,loyalty,62833
+mk_9e21ddae, richard.sanchez404@outlook.com ,Richard,Sanchez,false,true,2017-06-03T17:59:00Z,loyalty,79315
+mk_00d69b32,AMELIA.MOORE102@HOTMAIL.COM ,Amelia,Moore,true,false,2021-08-21T11:20:00Z,prospects,28617
+mk_405491ac,WILLIAM.HAYES.102@HOTMAIL.COM ,William,Hayes,true,false,,loyalty,65418
+mk_b79cf38c, MATTHEW.WHITE770@OUTLOOK.COM ,Matthew,White,false,false,2018-01-17T16:16:00Z,prospects,02166
+mk_b1049015,emily.gonzalez.630@hotmail.com ,Emily,Gonzalez,true,true,,prospects,68266
+mk_eb5a4c21,matthew.sanchez_646@yahoo.com,Matthew,Sanchez,false,false,2022-11-22T15:01:00Z,prospects,79465
+mk_026bf7b6,JAMES.CARTER-74@HOTMAIL.COM,James,Carter,true,false,2017-05-26T16:08:00Z,prospects,46961
+mk_5feeb70d,GRACE.GONZALEZ-437@YAHOO.COM ,Grace,Gonzalez,false,false,2022-12-08T15:53:00Z,prospects,88687
+mk_8e1e4840, MICHAEL.ALLEN-55@OUTLOOK.COM ,Michael,Allen,true,true,,loyalty,83834
+mk_27ca7e4f, KAREN.LOPEZ-338@OUTLOOK.COM ,Karen,Lopez,true,false,2021-04-14T09:24:00Z,prospects,68473
+mk_aa6921cb, PRIOR.AVA.GARCIA987@OUTLOOK.COM ,Ava,Garcia,true,false,2023-07-16T19:01:00Z,newsletter,02596
+mk_7f89c3c6,prior.sarah.walker730@yahoo.com ,Sarah,Walker,true,false,,newsletter,88748
+mk_e67c8b02,betty.hayes-725@hotmail.com ,Betty,Hayes,false,true,2018-11-23T19:54:00Z,loyalty,92487
+mk_54012ad5, MASON.YOUNG.186@GMAIL.COM ,Mason,Young,true,false,,prospects,42948
+mk_50f4b02a, ROBERT.JACKSON.99@YAHOO.COM ,Robert,Jackson,true,true,2019-03-20T16:42:00Z,prospects,05166
+mk_e896e086,MASON.GARCIA82@HOTMAIL.COM,Mason,Garcia,true,true,2018-09-20T17:26:00Z,prospects,43575
+mk_aac89214,MASON.WHITE.923@OUTLOOK.COM,Mason,White,true,false,2023-06-03T17:41:00Z,loyalty,91367
+mk_0c756e58,mason.brown_254@gmail.com,Mason,Brown,true,true,,newsletter,39661
+mk_d12b4599, THOMAS.MARTINEZ_685@ICLOUD.COM ,Thomas,Martinez,true,false,2018-07-27T19:11:00Z,prospects,70761
+mk_e16e001b,LIAM.BROWN_775@HOTMAIL.COM ,Liam,Brown,true,false,2022-03-28T13:58:00Z,prospects,48494
+mk_80c09bbf,elizabeth.thompson.957@gmail.com,Elizabeth,Thompson,true,false,2017-08-11T16:58:00Z,prospects,43177
+mk_6dd923c1,ANTHONY.REED.99@YAHOO.COM ,Anthony,Reed,false,true,2019-05-03T11:17:00Z,prospects,78559
+mk_b441fdeb, MARGARET.RAMIREZ.269@YAHOO.COM ,Margaret,Ramirez,true,false,2019-08-15T17:52:00Z,prospects,88182
+mk_fbf28d1f,ETHAN.MOORE_542@GMAIL.COM,Ethan,Moore,true,false,2018-04-23T09:57:00Z,newsletter,36398
+mk_85a38235,CHRISTOPHER.LEWIS.136@ICLOUD.COM ,Christopher,Lewis,true,false,2021-06-17T12:56:00Z,newsletter,12936
+mk_d2b74aa3,CHARLES.REED-540@ICLOUD.COM ,Charles,Reed,true,false,2022-06-27T13:32:00Z,prospects,66156
+mk_b3265058,liam.quinn.26@outlook.com ,Liam,Quinn,true,true,,prospects,54278
+mk_bfa68ddc, olivia.lewis-951@yahoo.com ,Olivia,Lewis,true,false,2017-04-19T14:10:00Z,prospects,05489
+mk_778d2099,BETTY.BROOKS-428@HOTMAIL.COM ,Betty,Brooks,true,false,2020-11-06T15:13:00Z,newsletter,15956
+mk_b0007aca,daniel.robinson-420@yahoo.com,Daniel,Robinson,true,false,2018-04-12T20:22:00Z,prospects,47108
+mk_4103eb83,RICHARD.MILLER_188@ICLOUD.COM,Richard,Miller,false,true,,prospects,86556
+mk_7d50f171,ELIZABETH.JACKSON@HOTMAIL.COM,Elizabeth,Jackson,true,false,2022-12-21T16:53:00Z,newsletter,59222
+mk_63405cd1, ANTHONY.JOHNSON-204@OUTLOOK.COM ,Anthony,Johnson,true,false,2021-10-24T18:27:00Z,loyalty,61598
+mk_07b03d91,MARY.MILLER_69@YAHOO.COM,Mary,Miller,true,true,2023-12-18T18:19:00Z,prospects,12889
+mk_b78b7bc6,CHRISTOPHER.WHITE_228@GMAIL.COM,Christopher,White,true,false,,prospects,19256
+mk_556034bd, william.young_527@gmail.com ,William,Young,true,false,2021-05-13T13:08:00Z,loyalty,60146
+mk_8cad322a,NOAH.REED509@ICLOUD.COM ,Noah,Reed,true,false,2019-10-27T14:44:00Z,newsletter,53315
+mk_65f96b45,lisa.carter@gmail.com ,Lisa,Carter,true,false,2020-03-26T13:43:00Z,prospects,25175
+mk_7cac27a9,thomas.hayes.467@yahoo.com ,Thomas,Hayes,true,false,,newsletter,16938
+mk_52528e9e,patricia.king@hotmail.com,Patricia,King,true,false,2020-04-21T17:55:00Z,prospects,35856
+mk_38ad8484, BETTY.JOHNSON871@OUTLOOK.COM ,Betty,Johnson,true,false,2021-05-04T11:40:00Z,prospects,11543
+mk_445461de,JORDAN.PEREZ-337@GMAIL.COM,Jordan,Perez,true,true,2018-04-08T19:57:00Z,prospects,75195
+mk_104bbecf, JOSEPH.ANDERSON_305@ICLOUD.COM ,Joseph,Anderson,false,false,,newsletter,97676
+mk_eaba54c3,thomas.garcia-534@yahoo.com,Thomas,Garcia,true,true,2020-11-10T16:57:00Z,prospects,31632
+mk_54219b00,emma.thomas131@icloud.com,Emma,Thomas,true,false,2021-03-16T08:38:00Z,newsletter,84634
+mk_1b39f3b1,JESSICA.ROBINSON193@OUTLOOK.COM,Jessica,Robinson,true,true,2022-11-21T15:36:00Z,loyalty,41852
+mk_7ddabf29,BARBARA.LOPEZ683@GMAIL.COM,Barbara,Lopez,true,false,2020-09-19T16:36:00Z,loyalty,89813
+mk_7ed50a49,william.thompson186@yahoo.com ,William,Thompson,true,false,,prospects,09614
+mk_29fd9c1b, MARK.QUINN-860@YAHOO.COM ,Mark,Quinn,false,false,2020-03-08T10:21:00Z,newsletter,65763
+mk_f00fc2d9,liam.hall348@gmail.com ,Liam,Hall,true,false,2021-11-07T18:13:00Z,newsletter,24362
+mk_8ddce667, jordan.sanchez_903@yahoo.com ,Jordan,Sanchez,false,true,2021-06-28T14:29:00Z,loyalty,10791
+mk_6ec644e4, MASON.LEWIS-258@OUTLOOK.COM ,Mason,Lewis,true,false,2018-05-27T13:25:00Z,loyalty,76217
+mk_60cd8d49,WILLIAM.MILLER842@GMAIL.COM ,William,Miller,true,false,,prospects,17183
+mk_aacef415, AVA.THOMPSON.718@ICLOUD.COM ,Ava,Thompson,true,false,2021-02-25T15:51:00Z,prospects,67317
+mk_8a76bf8f, lisa.taylor-256@hotmail.com ,Lisa,Taylor,true,true,2019-01-07T15:56:00Z,prospects,73839
+mk_fd7dfad7,AVA.PEREZ_317@ICLOUD.COM,Ava,Perez,true,false,2020-04-09T19:54:00Z,newsletter,73143
+mk_6ea53e37, karen.wright809@outlook.com ,Karen,Wright,true,false,2022-02-22T19:22:00Z,loyalty,73809
+mk_ef723837,emma.sanchez@yahoo.com ,Emma,Sanchez,true,true,,newsletter,55426
+mk_62783ff3, DAVID.WHITE_548@YAHOO.COM ,David,White,true,false,2019-09-23T08:43:00Z,newsletter,56612
+mk_66e88885,olivia.clark-137@icloud.com ,Olivia,Clark,false,false,2017-07-28T18:28:00Z,loyalty,78164
+mk_0abad58c, charles.wilson-434@gmail.com ,Charles,Wilson,true,false,2022-04-20T14:19:00Z,newsletter,36815
+mk_4cf1d69e,charles.taylor@yahoo.com ,Charles,Taylor,true,false,2023-12-13T19:43:00Z,prospects,33399
+mk_b87de8ac, daniel.hall-240@outlook.com ,Daniel,Hall,true,true,2022-06-22T16:02:00Z,loyalty,20683
+mk_63929747, OLIVIA.PEREZ@HOTMAIL.COM ,Olivia,Perez,true,false,2023-08-26T17:41:00Z,loyalty,11833
+mk_37f893fe,jennifer.taylor.243@gmail.com ,Jennifer,Taylor,true,true,2017-07-05T17:30:00Z,newsletter,83745
+mk_07cd0495, ETHAN.QUINN_825@ICLOUD.COM ,Ethan,Quinn,true,false,2022-02-13T12:42:00Z,newsletter,58342
+mk_4fd90086, jessica.davis-119@icloud.com ,Jessica,Davis,true,false,2023-12-18T10:53:00Z,loyalty,54654
+mk_a997d01a,CHARLES.WHITE_988@ICLOUD.COM ,Charles,White,false,false,2017-01-25T16:46:00Z,newsletter,45512
+mk_eeadbe10,susan.white@icloud.com,Susan,White,true,false,2017-02-01T11:02:00Z,prospects,83527
+mk_391830c5,lucas.wilson_223@icloud.com ,Lucas,Wilson,true,true,2020-06-09T11:17:00Z,loyalty,78523
+mk_4c95b861,MARY.SANCHEZ@HOTMAIL.COM,Mary,Sanchez,true,false,,loyalty,47141
+mk_7b837863,mary.brooks_420@hotmail.com,Mary,Brooks,true,true,,prospects,95843
+mk_26304f90, christopher.wilson-534@gmail.com ,Christopher,Wilson,true,false,2021-09-24T16:17:00Z,loyalty,05647
+mk_18a1a8a4,SARAH.CLARK.626@HOTMAIL.COM ,Sarah,Clark,true,true,2018-08-28T11:55:00Z,loyalty,07904
+mk_134960d8,PRIOR.JOSEPH.REED@HOTMAIL.COM ,Joseph,Reed,true,false,2017-10-05T13:17:00Z,newsletter,74638
+mk_c56bbc62,MARY.KING-319@YAHOO.COM ,Mary,King,true,true,,loyalty,66794
+mk_ee8402bd, susan.allen@gmail.com ,Susan,Allen,false,true,2019-08-01T18:00:00Z,loyalty,52602
+mk_728d2570,emma.king.6@outlook.com,Emma,King,false,false,2021-12-15T10:33:00Z,loyalty,05435
+mk_f7ffeb2e,ELIZABETH.QUINN-654@OUTLOOK.COM ,Elizabeth,Quinn,true,true,2019-08-25T14:15:00Z,prospects,03477
+mk_6d81108b, james.jackson.404@yahoo.com ,James,Jackson,true,false,2021-06-20T19:04:00Z,prospects,31609
+mk_e8fc86e3,ava.young.325@yahoo.com ,Ava,Young,false,false,,newsletter,53926
+mk_7f47e210, betty.johnson-772@gmail.com ,Betty,Johnson,true,true,2017-06-13T09:24:00Z,newsletter,19182
+mk_934cb5e4,ETHAN.DAVIS@HOTMAIL.COM,Ethan,Davis,false,true,2023-09-13T13:07:00Z,newsletter,67307
+mk_ab9cca4b, MARK.WALKER@YAHOO.COM ,Mark,Walker,false,true,2021-04-21T12:40:00Z,loyalty,03109
+mk_90368d61,MATTHEW.RODRIGUEZ@ICLOUD.COM,Matthew,Rodriguez,false,false,,newsletter,54723
+mk_016ccd48,liam.jackson743@icloud.com,Liam,Jackson,true,true,2023-01-01T12:14:00Z,newsletter,24527
+mk_719c5f27,jordan.thomas920@outlook.com,Jordan,Thomas,false,true,,prospects,47211
+mk_8cb39f36, emma.brown_264@hotmail.com ,Emma,Brown,true,true,2019-09-03T18:28:00Z,prospects,80159
+mk_376f07ce, AVA.LEE675@HOTMAIL.COM ,Ava,Lee,true,true,,prospects,60445
+mk_a9e3ccf4, BETTY.CARTER_947@GMAIL.COM ,Betty,Carter,false,false,2018-04-18T08:10:00Z,prospects,06574
+mk_643c0ffb, JAMES.JONES-210@OUTLOOK.COM ,James,Jones,true,true,2023-06-20T13:41:00Z,loyalty,09211
+mk_331f2e24, lisa.clark@yahoo.com ,Lisa,Clark,true,false,2020-10-23T14:56:00Z,loyalty,67507
+mk_e52d39bb,THOMAS.TAYLOR119@ICLOUD.COM,Thomas,Taylor,true,false,,newsletter,81725
+mk_09acc3dc,DAVID.KING_559@YAHOO.COM ,David,King,true,true,2017-07-12T11:28:00Z,newsletter,56751
+mk_7f1751c2,joseph.anderson.731@outlook.com ,Joseph,Anderson,false,true,2019-06-26T20:56:00Z,newsletter,40823
+mk_1f384bd4, lisa.johnson-246@gmail.com ,Lisa,Johnson,true,false,2021-02-05T09:55:00Z,loyalty,41435
+mk_d80c73e0,NANCY.RODRIGUEZ211@ICLOUD.COM ,Nancy,Rodriguez,true,false,2017-02-12T15:55:00Z,prospects,37887
+mk_50984fe1, margaret.quinn804@hotmail.com ,Margaret,Quinn,true,true,2017-10-23T20:21:00Z,prospects,40423
+mk_53a94130,ETHAN.JONES_185@OUTLOOK.COM ,Ethan,Jones,true,false,,loyalty,15355
+mk_b95efb54, david.perez-272@outlook.com ,David,Perez,true,false,2022-08-27T12:01:00Z,newsletter,08426
+mk_1b688172,LIAM.CARTER.662@YAHOO.COM ,Liam,Carter,true,false,2020-04-26T08:26:00Z,newsletter,11576
+mk_5a7b3621,MIA.LEWIS_573@YAHOO.COM,Mia,Lewis,true,true,2021-05-27T12:50:00Z,prospects,72901
+mk_edea166f,richard.williams.404@icloud.com,Richard,Williams,false,true,2020-07-16T13:07:00Z,newsletter,63544
+mk_7e278b6f, LUCAS.JACKSON.34@GMAIL.COM ,Lucas,Jackson,true,true,2023-12-19T11:16:00Z,loyalty,70582
+mk_4904a456,betty.anderson_965@icloud.com ,Betty,Anderson,true,false,2020-07-10T17:33:00Z,loyalty,95342
+mk_4ce34339,william.quinn@gmail.com,William,Quinn,false,true,2022-10-23T12:23:00Z,newsletter,27315
+mk_643d8bc0, JESSICA.LOPEZ.797@YAHOO.COM ,Jessica,Lopez,true,false,2017-04-09T19:43:00Z,newsletter,13795
+mk_a6fddae7,prior.jordan.ramirez_312@icloud.com ,Jordan,Ramirez,true,false,2021-02-25T17:16:00Z,newsletter,52983
+mk_138613ca,THOMAS.WRIGHT@YAHOO.COM ,Thomas,Wright,true,false,2020-03-07T17:31:00Z,loyalty,58984
+mk_e5b4e972,amelia.martinez105@hotmail.com ,Amelia,Martinez,true,true,,prospects,57697
+mk_6569a0a5,ANTHONY.RAMIREZ@YAHOO.COM,Anthony,Ramirez,true,false,2022-12-10T13:06:00Z,newsletter,68196
+mk_556199d1,NANCY.KING.998@OUTLOOK.COM,Nancy,King,true,true,2022-03-25T10:32:00Z,loyalty,49623
+mk_34490f21, NANCY.BROWN@OUTLOOK.COM ,Nancy,Brown,true,false,2022-09-04T09:51:00Z,loyalty,85971
+mk_72afd229, betty.garcia-421@gmail.com ,Betty,Garcia,true,false,2020-08-08T14:33:00Z,newsletter,02578
+mk_dd3bbf86,SARAH.GONZALEZ-308@GMAIL.COM ,Sarah,Gonzalez,true,true,2023-06-20T16:10:00Z,loyalty,08389
+mk_e4b06eb6,PRIOR.WILLIAM.CLARK_688@YAHOO.COM,William,Clark,true,false,2020-05-27T12:13:00Z,newsletter,31657
+mk_1b4049a8, ELIZABETH.DAVIS.493@YAHOO.COM ,Elizabeth,Davis,false,true,2023-11-13T19:43:00Z,newsletter,37373
+mk_ef3f214d, MARGARET.RODRIGUEZ_286@GMAIL.COM ,Margaret,Rodriguez,true,true,2022-07-15T09:02:00Z,newsletter,37852
+mk_859c6cdf,betty.lee@yahoo.com ,Betty,Lee,true,false,2022-08-01T15:47:00Z,newsletter,63368
+mk_a27e74c6,PRIOR.SARAH.LEE557@GMAIL.COM ,Sarah,Lee,true,false,2022-06-15T20:09:00Z,loyalty,27731
+mk_28398d9c, MICHAEL.WHITE_28@HOTMAIL.COM ,Michael,White,true,false,2019-04-06T08:12:00Z,newsletter,70352
+mk_0a6d3d71,LIAM.KING_640@GMAIL.COM,Liam,King,true,true,2022-08-10T17:35:00Z,loyalty,94603
+mk_1c1389db, grace.miller.201@icloud.com ,Grace,Miller,true,false,2017-10-23T17:31:00Z,prospects,42898
+mk_9cb08e47, LIAM.LEWIS151@GMAIL.COM ,Liam,Lewis,true,true,2017-03-18T19:50:00Z,newsletter,22697
+mk_7666c50b,MARGARET.WHITE7@YAHOO.COM ,Margaret,Sanchez,true,true,2023-03-19T11:41:00Z,loyalty,23211
+mk_f27f2bb3, lucas.jones661@icloud.com ,Lucas,Jones,true,false,2021-11-06T10:08:00Z,newsletter,47834
+mk_7f31e2f2,SARAH.WHITE@OUTLOOK.COM ,Sarah,White,false,true,,prospects,39318
+mk_c8df2426,PRIOR.MATTHEW.RAMIREZ-149@HOTMAIL.COM ,Matthew,Ramirez,true,true,2021-08-19T09:30:00Z,prospects,43739
+mk_252c527a,CHRISTOPHER.HARRIS_241@GMAIL.COM,Christopher,Harris,true,false,2019-02-21T13:10:00Z,prospects,66645
+mk_be94bd82,AVA.WILLIAMS_368@ICLOUD.COM,Ava,Williams,true,false,,newsletter,87187
+mk_ad1076b0,AMELIA.BROWN-911@YAHOO.COM ,Amelia,Brown,true,true,2017-04-17T18:57:00Z,loyalty,40402
+mk_4b5d73da,matthew.jones_891@outlook.com,Matthew,Jones,true,false,2017-07-26T12:42:00Z,newsletter,80529
+mk_3c466c7c, ROBERT.KING@HOTMAIL.COM ,Robert,King,true,true,,prospects,73658
+mk_8c8ddce6,RICHARD.ALLEN451@ICLOUD.COM,Richard,Allen,false,true,2021-10-24T20:53:00Z,loyalty,79598
+mk_ca68cf26, christopher.johnson_797@gmail.com ,Christopher,Johnson,true,false,2017-09-23T19:05:00Z,newsletter,12457
+mk_8bdf4738, ELIZABETH.PEREZ253@ICLOUD.COM ,Elizabeth,Perez,true,true,2020-12-04T08:31:00Z,newsletter,63849
+mk_7d0169ac,olivia.smith-564@hotmail.com,Olivia,Smith,true,true,2018-08-09T14:03:00Z,newsletter,79368
+mk_d37613ec,JAMES.SMITH879@OUTLOOK.COM,James,Smith,true,false,2018-06-05T09:50:00Z,loyalty,87832
+mk_0ab4c0dc,mary.brooks-170@gmail.com,Mary,Brooks,true,false,2021-02-20T15:06:00Z,loyalty,33629
+mk_91671e49,KAREN.ANDERSON_486@HOTMAIL.COM ,Karen,Anderson,true,true,,newsletter,38918
+mk_a2c51712, PATRICIA.JOHNSON-927@ICLOUD.COM ,Patricia,Johnson,true,true,2020-04-20T18:20:00Z,loyalty,82483
+mk_7d066458,BARBARA.HAYES856@YAHOO.COM,Barbara,Hayes,true,false,,loyalty,50546
+mk_ce207bf6, prior.sarah.taylor-766@hotmail.com ,Sarah,Taylor,false,false,2017-07-04T19:46:00Z,newsletter,26401
+mk_8d1c0212,NANCY.LEE@OUTLOOK.COM,Nancy,Lee,false,false,2020-08-21T20:51:00Z,prospects,38558
+mk_b930fc7e,amelia.thompson_464@hotmail.com,Amelia,Thompson,false,false,2019-01-21T20:50:00Z,newsletter,74482
+mk_13265bf0, BARBARA.ANDERSON329@ICLOUD.COM ,Barbara,Anderson,true,true,2020-05-08T14:08:00Z,newsletter,06201
+mk_ab7e1332,MASON.JACKSON173@YAHOO.COM,Mason,Jackson,true,false,2018-12-22T16:05:00Z,loyalty,81357
+mk_c8032ece, BARBARA.CARTER_342@ICLOUD.COM ,Barbara,Carter,true,false,2018-01-25T18:35:00Z,newsletter,24791
+mk_d8730135,NANCY.JONES.990@HOTMAIL.COM ,Nancy,Jones,true,false,2020-01-19T20:17:00Z,newsletter,72836
+mk_90d816fa,ANTHONY.SMITH.116@HOTMAIL.COM ,Anthony,Smith,false,true,2017-04-14T13:16:00Z,loyalty,22558
+mk_f4025ef7, PRIOR.JENNIFER.JACKSON@OUTLOOK.COM ,Jennifer,Jackson,false,true,,newsletter,41559
+mk_b22269fc,JOSEPH.TAYLOR.319@OUTLOOK.COM,Joseph,Taylor,true,false,2017-07-16T20:34:00Z,prospects,93121
+mk_8c0cece2, betty.brown.5@outlook.com ,Betty,Brown,true,false,2017-09-15T08:09:00Z,prospects,46644
+mk_3dc81ed2,MATTHEW.JACKSON277@YAHOO.COM ,Matthew,Jackson,true,true,,prospects,12758
+mk_dc207fb2, SUSAN.WILSON_83@GMAIL.COM ,Susan,Wilson,true,true,2019-06-26T16:25:00Z,prospects,12359
+mk_47530f22,JOSEPH.HALL-710@YAHOO.COM,Joseph,Hall,false,false,2017-11-26T18:45:00Z,newsletter,47135
+mk_e33766e6,LISA.SMITH-98@OUTLOOK.COM,Lisa,Smith,false,true,,newsletter,14965
+mk_a5c3d4ce,ELIZABETH.CLARK-416@YAHOO.COM,Elizabeth,Clark,false,false,2020-02-02T11:40:00Z,prospects,93654
+mk_bb3bf3c9, GRACE.WRIGHT@ICLOUD.COM ,Grace,Wright,false,false,2019-09-02T13:19:00Z,prospects,79102
+mk_9cf4f6a1,michael.lopez62@icloud.com ,Michael,Lopez,true,true,2020-02-12T13:00:00Z,loyalty,30765
+mk_b954f353,BARBARA.ROBINSON@HOTMAIL.COM,Barbara,Robinson,false,false,2023-12-22T10:00:00Z,loyalty,35467
+mk_02581e35,amelia.harris@gmail.com,Amelia,Harris,true,false,2023-04-09T18:37:00Z,prospects,76942
+mk_ad1f634f,KAREN.JONES.881@OUTLOOK.COM,Karen,Jones,false,true,2021-09-11T12:38:00Z,newsletter,28492
+mk_131e008a,MICHAEL.WILSON.96@GMAIL.COM ,Michael,Wilson,true,true,2021-11-11T17:47:00Z,loyalty,25885
+mk_8b4430d4,CHRISTOPHER.SANCHEZ-46@OUTLOOK.COM,Christopher,Sanchez,false,false,,prospects,84466
+mk_ea879c6b,MARGARET.THOMPSON-103@GMAIL.COM ,Margaret,Thompson,true,false,2021-05-25T08:46:00Z,prospects,57679
+mk_dce864d2,prior.liam.williams.103@hotmail.com ,Liam,Williams,true,true,2022-04-04T18:03:00Z,loyalty,68617
+mk_679c1da2, KAREN.LOPEZ@GMAIL.COM ,Karen,Lopez,true,false,2019-05-08T10:34:00Z,newsletter,31333
+mk_a657a204, prior.mason.johnson-411@gmail.com ,Mason,Johnson,false,false,2019-07-11T20:37:00Z,loyalty,41114
+mk_7f962340,LINDA.TAYLOR.532@OUTLOOK.COM ,Linda,Taylor,true,false,,newsletter,06653
+mk_40e275d8,MARK.JONES-866@GMAIL.COM,Mark,Jones,true,false,2017-08-15T15:04:00Z,prospects,24431
+mk_2b2b5567,nancy.hall_588@yahoo.com,Nancy,Hall,true,false,2019-08-25T11:05:00Z,loyalty,05818
+mk_0b472563, robert.taylor-320@outlook.com ,Robert,Taylor,false,false,2020-04-27T14:45:00Z,loyalty,64751
+mk_acae33e8,DANIEL.THOMPSON851@GMAIL.COM ,Daniel,Thompson,true,true,2017-04-08T12:14:00Z,loyalty,60404
+mk_5d5d4925, NANCY.HAYES-802@HOTMAIL.COM ,Nancy,Hayes,true,false,2017-01-14T12:38:00Z,newsletter,70882
+mk_7e876c86,CHARLES.HAYES405@ICLOUD.COM ,Charles,Hayes,false,false,2022-06-26T08:10:00Z,loyalty,72593
+mk_83a0c5ea,MARY.REED@GMAIL.COM ,Mary,Reed,true,true,2020-09-06T15:50:00Z,loyalty,32538
+mk_fee9b523,matthew.martinez@gmail.com,Matthew,Martinez,true,false,2018-09-04T08:14:00Z,loyalty,77468
+mk_01f001ab, AVA.HAYES_548@ICLOUD.COM ,Ava,Hayes,true,false,2023-02-10T13:05:00Z,loyalty,39513
+mk_54876c5c,WILLIAM.MARTIN-220@ICLOUD.COM,William,Martin,false,true,2022-03-04T16:59:00Z,prospects,29949
+mk_1ed1e59e,prior.amelia.wright@icloud.com ,Amelia,Wright,true,false,,loyalty,46905
+mk_39b0b0b0,PRIOR.WILLIAM.CLARK.183@YAHOO.COM,William,Clark,true,false,2017-12-12T11:41:00Z,newsletter,08476
+mk_e5bfc425, ava.sanchez_472@yahoo.com ,Ava,Sanchez,true,false,2017-08-13T08:41:00Z,newsletter,09914
+mk_07ad43fa,karen.wilson7@outlook.com ,Karen,Wilson,true,false,2023-02-09T12:31:00Z,prospects,18871
+mk_7360c18c,barbara.brown731@yahoo.com ,Barbara,Brown,true,false,,loyalty,70895
+mk_6306846b,LISA.WHITE@OUTLOOK.COM,Lisa,White,false,true,2020-12-17T11:39:00Z,loyalty,76464
+mk_33355167,ANTHONY.DAVIS@HOTMAIL.COM,Anthony,Davis,true,false,2018-12-14T18:31:00Z,newsletter,22178
+mk_0956a746,grace.harris41@icloud.com ,Grace,Harris,true,false,2023-03-12T11:39:00Z,newsletter,60799
+mk_265a8431, barbara.quinn614@icloud.com ,Barbara,Quinn,true,true,2017-03-08T16:33:00Z,newsletter,30654
+mk_a2749e1d, lucas.king-689@outlook.com ,Lucas,King,false,true,2020-10-12T12:30:00Z,newsletter,65666
+mk_785d4826,james.hayes@hotmail.com ,James,Hayes,true,true,2019-01-01T15:27:00Z,newsletter,60908
+mk_373449eb, DANIEL.BROOKS.375@OUTLOOK.COM ,Daniel,Brooks,true,false,,loyalty,24903
+mk_7b0e98e6,JOSEPH.BROWN502@OUTLOOK.COM,Joseph,Brown,false,false,2017-04-27T12:16:00Z,loyalty,40612
+mk_cd55ff9b,CHRISTOPHER.YOUNG@YAHOO.COM ,Christopher,Young,false,true,2018-07-02T17:05:00Z,newsletter,62311
+mk_646076b6, SARAH.HALL@ICLOUD.COM ,Sarah,Hall,true,true,2017-02-02T09:38:00Z,loyalty,88718
+mk_02678d35,prior.jordan.wilson-167@yahoo.com ,Jordan,Wilson,true,true,2019-10-09T16:59:00Z,newsletter,55959
+mk_c198eeeb,JESSICA.MILLER@HOTMAIL.COM,Jessica,Miller,true,false,2018-11-06T17:33:00Z,newsletter,07448
+mk_4bbadd76, CHRISTOPHER.WALKER-119@GMAIL.COM ,Christopher,Walker,true,false,,newsletter,76296
+mk_7b2e66ac,robert.thompson@outlook.com ,Robert,Thompson,true,false,2017-08-14T11:21:00Z,prospects,28426
+mk_bf121592,PRIOR.OLIVIA.HAYES989@HOTMAIL.COM ,Olivia,Hayes,true,false,2019-10-27T13:49:00Z,newsletter,22452
+mk_de83648e,elizabeth.brown-800@icloud.com,Elizabeth,Brown,true,false,,loyalty,53636
+mk_e9ac990b,EMILY.THOMPSON@ICLOUD.COM,Emily,Thompson,true,true,2018-02-17T15:31:00Z,prospects,09174

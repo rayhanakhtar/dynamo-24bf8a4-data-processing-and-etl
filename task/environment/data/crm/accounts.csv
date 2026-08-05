@@ -1,0 +1,129 @@
+account_id,account_name,industry,size_segment,billing_email
+acct_b7c62dbc,Lakeview Outfitters,Manufacturing,small,ap@lakeviewoutfitters.example
+acct_c2fbba9a,Trailside Distributors,Logistics,mid,ap@trailsidedistributors.example
+acct_3b4fae39,Northpeak Trading,Retail,mid,ap@northpeaktrading.example
+acct_eb7b872d,Blue Harbor LLC,Logistics,mid,ap@blueharborllc.example
+acct_6fe22b8c,Lakeview Outfitters,Retail,mid,ap@lakeviewoutfitters.example
+acct_6d770327,Cascade Supply Co,Wholesale,large,ap@cascadesupplyco.example
+acct_ef466482,Blue Harbor LLC,Retail,large,ap@blueharborllc.example
+acct_34f7e73e,Blue Harbor LLC,Logistics,small,ap@blueharborllc.example
+acct_0b72800c,Blue Harbor LLC,Wholesale,mid,ap@blueharborllc.example
+acct_2ba591cc,Blue Harbor LLC,Retail,mid,ap@blueharborllc.example
+acct_f062c3a7,Lakeview Outfitters,Hospitality,mid,ap@lakeviewoutfitters.example
+acct_4b9ad0dc,Blue Harbor LLC,Wholesale,mid,ap@blueharborllc.example
+acct_745cf03d,Cascade Supply Co,Retail,large,ap@cascadesupplyco.example
+acct_fd5ef59d,Trailside Distributors,Retail,mid,ap@trailsidedistributors.example
+acct_edeabf4b,Trailside Distributors,Logistics,small,ap@trailsidedistributors.example
+acct_b3a73e45,Cascade Supply Co,Wholesale,large,ap@cascadesupplyco.example
+acct_eaad7ce6,Trailside Distributors,Manufacturing,mid,ap@trailsidedistributors.example
+acct_54cfd1d0,Northpeak Trading,Wholesale,mid,ap@northpeaktrading.example
+acct_aa8ddad0,Trailside Distributors,Retail,large,ap@trailsidedistributors.example
+acct_431059e7,Trailside Distributors,Logistics,mid,ap@trailsidedistributors.example
+acct_e429e6ca,Cascade Supply Co,Wholesale,mid,ap@cascadesupplyco.example
+acct_dbb38ca3,Summit Procurement,Retail,small,ap@summitprocurement.example
+acct_e658b252,Lakeview Outfitters,Hospitality,mid,ap@lakeviewoutfitters.example
+acct_6e053727,Lakeview Outfitters,Wholesale,small,ap@lakeviewoutfitters.example
+acct_f6127e0e,Summit Procurement,Logistics,large,ap@summitprocurement.example
+acct_53a5afc6,Blue Harbor LLC,Wholesale,large,ap@blueharborllc.example
+acct_2a5dc60a,Trailside Distributors,Manufacturing,small,ap@trailsidedistributors.example
+acct_598caf8c,Lakeview Outfitters,Wholesale,mid,ap@lakeviewoutfitters.example
+acct_eb1a7e75,Northpeak Trading,Manufacturing,small,ap@northpeaktrading.example
+acct_455379bc,Lakeview Outfitters,Manufacturing,small,ap@lakeviewoutfitters.example
+acct_f7993661,Blue Harbor LLC,Hospitality,mid,ap@blueharborllc.example
+acct_8bedccd7,Lakeview Outfitters,Manufacturing,small,ap@lakeviewoutfitters.example
+acct_261c4fe5,Northpeak Trading,Retail,mid,ap@northpeaktrading.example
+acct_48bcd0d0,Northpeak Trading,Manufacturing,large,ap@northpeaktrading.example
+acct_d7542145,Cascade Supply Co,Logistics,large,ap@cascadesupplyco.example
+acct_062424b7,Northpeak Trading,Manufacturing,large,ap@northpeaktrading.example
+acct_8bba477b,Blue Harbor LLC,Manufacturing,mid,ap@blueharborllc.example
+acct_fcd6b25d,Northpeak Trading,Wholesale,mid,ap@northpeaktrading.example
+acct_9524bd78,Cascade Supply Co,Wholesale,small,ap@cascadesupplyco.example
+acct_927d4302,Cascade Supply Co,Manufacturing,large,ap@cascadesupplyco.example
+acct_8d0177d2,Northpeak Trading,Retail,small,ap@northpeaktrading.example
+acct_77153bf0,Northpeak Trading,Retail,small,ap@northpeaktrading.example
+acct_c306dfb7,Trailside Distributors,Retail,large,ap@trailsidedistributors.example
+acct_9eaeac08,Northpeak Trading,Hospitality,mid,ap@northpeaktrading.example
+acct_fa70b85c,Summit Procurement,Retail,small,ap@summitprocurement.example
+acct_1277bff7,Trailside Distributors,Retail,mid,ap@trailsidedistributors.example
+acct_dc655177,Summit Procurement,Retail,small,ap@summitprocurement.example
+acct_c08f498d,Lakeview Outfitters,Manufacturing,mid,ap@lakeviewoutfitters.example
+acct_86086b30,Blue Harbor LLC,Logistics,small,ap@blueharborllc.example
+acct_d5f3c84e,Summit Procurement,Retail,mid,ap@summitprocurement.example
+acct_353bbc46,Summit Procurement,Manufacturing,small,ap@summitprocurement.example
+acct_1d212858,Lakeview Outfitters,Manufacturing,small,ap@lakeviewoutfitters.example
+acct_ee596658,Blue Harbor LLC,Manufacturing,mid,ap@blueharborllc.example
+acct_d8583cd7,Cascade Supply Co,Hospitality,mid,ap@cascadesupplyco.example
+acct_7460373d,Summit Procurement,Retail,large,ap@summitprocurement.example
+acct_33a62c86,Blue Harbor LLC,Wholesale,small,ap@blueharborllc.example
+acct_8b03c99b,Trailside Distributors,Manufacturing,mid,ap@trailsidedistributors.example
+acct_3b10fdbc,Lakeview Outfitters,Logistics,small,ap@lakeviewoutfitters.example
+acct_55da35a8,Blue Harbor LLC,Wholesale,large,ap@blueharborllc.example
+acct_72d5905b,Trailside Distributors,Manufacturing,small,ap@trailsidedistributors.example
+acct_af034cd4,Cascade Supply Co,Retail,mid,ap@cascadesupplyco.example
+acct_da943392,Northpeak Trading,Manufacturing,large,ap@northpeaktrading.example
+acct_de18f8ea,Summit Procurement,Manufacturing,mid,ap@summitprocurement.example
+acct_ca319022,Lakeview Outfitters,Retail,mid,ap@lakeviewoutfitters.example
+acct_507061bf,Trailside Distributors,Wholesale,mid,ap@trailsidedistributors.example
+acct_f39a9a96,Trailside Distributors,Logistics,large,ap@trailsidedistributors.example
+acct_92247201,Lakeview Outfitters,Logistics,mid,ap@lakeviewoutfitters.example
+acct_6a7aa972,Cascade Supply Co,Manufacturing,large,ap@cascadesupplyco.example
+acct_239a968f,Blue Harbor LLC,Manufacturing,small,ap@blueharborllc.example
+acct_ab870ad8,Cascade Supply Co,Hospitality,large,ap@cascadesupplyco.example
+acct_3ec9ca34,Lakeview Outfitters,Logistics,small,ap@lakeviewoutfitters.example
+acct_ca3b1b46,Blue Harbor LLC,Wholesale,large,ap@blueharborllc.example
+acct_bee89f37,Blue Harbor LLC,Manufacturing,small,ap@blueharborllc.example
+acct_099a3cfb,Lakeview Outfitters,Hospitality,large,ap@lakeviewoutfitters.example
+acct_d2046d44,Lakeview Outfitters,Logistics,small,ap@lakeviewoutfitters.example
+acct_f480ee63,Northpeak Trading,Wholesale,mid,ap@northpeaktrading.example
+acct_4fbf9800,Lakeview Outfitters,Manufacturing,small,ap@lakeviewoutfitters.example
+acct_3d45ec0a,Trailside Distributors,Wholesale,small,ap@trailsidedistributors.example
+acct_060a9418,Cascade Supply Co,Hospitality,mid,ap@cascadesupplyco.example
+acct_181389e6,Cascade Supply Co,Wholesale,large,ap@cascadesupplyco.example
+acct_2bafcfa9,Lakeview Outfitters,Logistics,large,ap@lakeviewoutfitters.example
+acct_e94b720c,Lakeview Outfitters,Manufacturing,large,ap@lakeviewoutfitters.example
+acct_04f14aa0,Summit Procurement,Retail,small,ap@summitprocurement.example
+acct_df10fd86,Trailside Distributors,Manufacturing,small,ap@trailsidedistributors.example
+acct_ba316312,Lakeview Outfitters,Logistics,mid,ap@lakeviewoutfitters.example
+acct_41392199,Cascade Supply Co,Hospitality,large,ap@cascadesupplyco.example
+acct_13ef56a3,Cascade Supply Co,Manufacturing,large,ap@cascadesupplyco.example
+acct_aa0a8884,Summit Procurement,Retail,mid,ap@summitprocurement.example
+acct_904c8232,Lakeview Outfitters,Wholesale,large,ap@lakeviewoutfitters.example
+acct_1102014c,Cascade Supply Co,Wholesale,small,ap@cascadesupplyco.example
+acct_a167e864,Trailside Distributors,Retail,mid,ap@trailsidedistributors.example
+acct_262b508d,Lakeview Outfitters,Wholesale,small,ap@lakeviewoutfitters.example
+acct_43e4f505,Trailside Distributors,Retail,small,ap@trailsidedistributors.example
+acct_fb0fbcf8,Northpeak Trading,Wholesale,small,ap@northpeaktrading.example
+acct_e6dab9ac,Trailside Distributors,Retail,mid,ap@trailsidedistributors.example
+acct_66b64c4f,Cascade Supply Co,Hospitality,mid,ap@cascadesupplyco.example
+acct_82460545,Cascade Supply Co,Retail,small,ap@cascadesupplyco.example
+acct_bf57aadb,Summit Procurement,Hospitality,mid,ap@summitprocurement.example
+acct_f2ebebf2,Cascade Supply Co,Wholesale,small,ap@cascadesupplyco.example
+acct_50259967,Lakeview Outfitters,Logistics,large,ap@lakeviewoutfitters.example
+acct_8fe1a49f,Summit Procurement,Logistics,small,ap@summitprocurement.example
+acct_5cccd213,Northpeak Trading,Hospitality,mid,ap@northpeaktrading.example
+acct_4908c1fc,Northpeak Trading,Hospitality,large,ap@northpeaktrading.example
+acct_1cf5fca6,Summit Procurement,Hospitality,large,ap@summitprocurement.example
+acct_bf3ec21a,Lakeview Outfitters,Hospitality,mid,ap@lakeviewoutfitters.example
+acct_61cff29f,Summit Procurement,Wholesale,small,ap@summitprocurement.example
+acct_546694f3,Cascade Supply Co,Manufacturing,small,ap@cascadesupplyco.example
+acct_524ebf1e,Trailside Distributors,Hospitality,small,ap@trailsidedistributors.example
+acct_d2b60b61,Cascade Supply Co,Wholesale,large,ap@cascadesupplyco.example
+acct_2a563d06,Lakeview Outfitters,Manufacturing,large,ap@lakeviewoutfitters.example
+acct_e970e7c3,Trailside Distributors,Wholesale,small,ap@trailsidedistributors.example
+acct_20f19df6,Lakeview Outfitters,Hospitality,small,ap@lakeviewoutfitters.example
+acct_4b86db59,Lakeview Outfitters,Manufacturing,small,ap@lakeviewoutfitters.example
+acct_ef699223,Lakeview Outfitters,Manufacturing,small,ap@lakeviewoutfitters.example
+acct_e4611b54,Summit Procurement,Retail,large,ap@summitprocurement.example
+acct_6d8709b6,Trailside Distributors,Hospitality,large,ap@trailsidedistributors.example
+acct_1e3ae7c5,Trailside Distributors,Retail,large,ap@trailsidedistributors.example
+acct_c3b07805,Trailside Distributors,Manufacturing,small,ap@trailsidedistributors.example
+acct_7dd11ff6,Northpeak Trading,Logistics,large,ap@northpeaktrading.example
+acct_a6cecf66,Northpeak Trading,Wholesale,small,ap@northpeaktrading.example
+acct_b5980ffa,Northpeak Trading,Manufacturing,small,ap@northpeaktrading.example
+acct_09e6538d,Blue Harbor LLC,Retail,large,ap@blueharborllc.example
+acct_584a2186,Cascade Supply Co,Manufacturing,small,ap@cascadesupplyco.example
+acct_b9c80e9b,Blue Harbor LLC,Logistics,mid,ap@blueharborllc.example
+acct_78590fec,Cascade Supply Co,Retail,mid,ap@cascadesupplyco.example
+acct_f384d265,Lakeview Outfitters,Wholesale,small,ap@lakeviewoutfitters.example
+acct_1809c6eb,Trailside Distributors,Wholesale,mid,ap@trailsidedistributors.example
+acct_70154884,Summit Procurement,Wholesale,large,ap@summitprocurement.example
