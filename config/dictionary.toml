@@ -597,16 +597,35 @@ include_details = true
 
 # =============================================================================
 # METRICS — exact definitions shared by the oracle's quality_report.py AND the
-# verifier. Each is an INTEGER. "master" = the canonical ground truth (verifier
-# side only; the oracle expresses these against its own reconstruction).
-# =============================================================================
+# verifier. Each is an INTEGER.
+#
+# ROW MODEL: a "raw row" is one non-blank, non-comment data row read from a
+# discovered source file — one JSON object per line for NDJSON, one data row
+# after the header for CSV. A row is PROCESSED (kept) iff it reads as a
+# well-formed record of the correct shape (a JSON object for NDJSON; a
+# full-width CSV row) AND it passes that source's structural gate described
+# below. Anything else is REJECTED. Parsing never fabricates a value: a field
+# that matches no rule yields NULL, never a guess.
+#
+# Per-source structural gate (the gate key, plus any required money parse):
+#   STORE: order id present (always true on a valid STORE row)
+#   IDP:   sub present
+#   CRM:   account_id (accounts), contact_id (contacts), opp_id (opportunities)
+#   ERP:   invoice_no present AND total_cents parses (invoices); shipment_no
+#          present (shipments)
+#   MRK:   profile_id present (subscribers); send_id present (sends)
+#   PAY:   txn_id present AND amount_cents parses (unparseable amount rejects
+#          the row even when txn_id is present)
+#   CAT:   cust_no present and non-empty
+#   SUP:   ticket_id present
+# -----------------------------------------------------------------------------
 
 [metrics]
-records_processed = "sum over sources of valid_rows_read"
-records_rejected = "sum over sources of (raw_rows_read - rows_kept_after_parse)"
+records_processed = "sum over all sources of the raw rows that read as a well-formed record of the correct shape and pass that source's structural gate; per [[sources]] this equals the kept count of that source's discovered files"
+records_rejected = "sum over all sources of max(0, raw rows read - records_processed for that source); a rejected row is one malformed in shape (a non-object NDJSON line, a wrong-width CSV row) or skipped by its structural gate (missing/blank gate key, or an unparseable money field where required)"
 duplicate_entities_merged = "max(0, count(entity clusters that resolve to a canonical customer) - count(final.customers)); each resolved cluster yields exactly one customer, so this is always 0"
-foreign_keys_repaired = "count(fk : resolves_to_master_key AND raw_value != canonical_value)"
-malformed_timestamps_corrected = "count(ts : parseable_only_via_secondary_format OR recovered_broken_iso)"
+foreign_keys_repaired = "count over SUP support tickets, not payments: a ticket is counted iff its order_ref (uppercase) starts with OR- and its canonicalized reference or-<lowercased tail> resolves to a canonical order; tickets with an empty order_ref, a non-OR- reference, or an unresolvable reference are never counted"
+malformed_timestamps_corrected = "cell-level count over only the checking sources — STORE.placed_at, PAY.paid_ts (created_ts or processed_at), ERP.issue_date, SUP.created_ts — incremented only for the cells that matched a remaining parse_order entry (us_mdy_time, us_mdy, date_only) or recover_broken_iso instead of the primary iso8601_z and instead of the source's own datetime_profile; IDP and CAT timestamps, and CRM and MRK cells, plus any cell that parsed on the primary/profile format, was blank, was NULL, or failed to parse, are never counted"
 null_values_imputed = "count over final.customers of every outputs.customers column except customer_key and gid whose final value is non-null and non-empty; the bool columns is_business and is_active always count. Nulls are imputed ONLY via precedence, so every counted value is one filled or carried by the highest-priority valid source"
 referential_integrity_violations = "count(fk : is_null_but_key_in_master) - count(genuinely_obsolete_refs)"
 final_customer_count = "count(final.customers)"
