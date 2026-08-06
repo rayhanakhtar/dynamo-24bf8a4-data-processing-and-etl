@@ -129,10 +129,15 @@ tie_break_secondary = "email_lexicographic"
 
 # -----------------------------------------------------------------------------
 # IDENTIFIERS (gid) — every canonical record carries a unique gid.
-#   customers.gid: the primary key of the highest-priority (lowest-numbered,
-#        per source_priority) identity source present in the linked cluster —
-#        IDP.sub > CRM.contact_id > CAT.cust_no > MRK.profile_id >
-#        STORE.customer_id > PAY.customer_ref. Copied verbatim (no prefix).
+#   customers.gid: the primary key of the highest-priority identity source
+#        present in the linked cluster, where source priority is defined
+#        by the ordered list `gid_order` (first = highest). The winning
+#        source's primary key is copied verbatim (no prefix). If that
+#        source contributes multiple primary keys to the cluster, the
+#        lexicographically smallest raw ID string is chosen — no numeric
+#        parsing, no first-seen rule, no synthetic-record preference.
+#        Priority order: IDP.sub > CRM.contact_id > CAT.cust_no >
+#        MRK.profile_id > STORE.customer_id > PAY.customer_ref.
 #   orders.gid:    DERIVED, never copied from a source: the literal "ORD"
 #        followed by the order_key zero-padded to exactly six digits
 #        ("ORD%06d"). The order_key is the sequential position (starting at 1)
