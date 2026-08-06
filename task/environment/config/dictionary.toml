@@ -596,6 +596,38 @@ number_type = "int"
 key_order = "sorted"
 include_details = true
 
+# -----------------------------------------------------------------------------
+# data_quality_report.json — REQUIRED SERIALIZATION (must reproduce the oracle
+# byte-for-byte; the verifier compares the produced file to the committed
+# fixture with byte equality, not semantic JSON equivalence).
+# -----------------------------------------------------------------------------
+# The report is a single JSON object with this exact envelope:
+#   {
+#     "include_details": true,
+#     "key_order": "sorted",
+#     "metrics": { <metric key -> integer, see [metrics] above> },
+#     "number_type": "int"
+#   }
+# Serialization rules (these exactly mirror the oracle writer):
+#   api          = json.dumps(payload, indent=2, sort_keys=True) followed by
+#                  one trailing newline character ("\n"); no other leading or
+#                  trailing whitespace is added.
+#   indent       = 2  (two spaces per nesting level; separators use the
+#                  standard library's pretty-printed defaults).
+#   key order    = sort_keys=True; every key (envelope and metric) is written
+#                  in ascending lexicographic order by Unicode code point,
+#                  i.e. alphabetically ascending (a..z).
+#   separators   = standard defaults with indent in effect: item separator
+#                  ",", key separator ": " (colon + one space).
+#   ensure_ascii = true (the default; all report values are ASCII).
+#   encoding     = UTF-8 (no BOM).
+#   line ending  = single "\n" (LF) throughout; the file ends with exactly one
+#                  newline after the closing "}" with no trailing blank line.
+#   values       = metrics are JSON integers (no leading zeros, no sign for
+#                  non-negative); "include_details" is the JSON boolean true;
+#                  string values are double-quoted JSON strings.
+# -----------------------------------------------------------------------------
+
 # =============================================================================
 # METRICS — exact definitions shared by the oracle's quality_report.py AND the
 # verifier. Each is an INTEGER.
