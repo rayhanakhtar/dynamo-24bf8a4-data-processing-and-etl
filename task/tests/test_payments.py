@@ -14,7 +14,13 @@ The verifier inspects outputs only — never implementation code.
 
 from __future__ import annotations
 
-from conftest import artifact_path, is_sorted, validate_cells
+from conftest import (
+    artifact_path,
+    assert_distinct_artifacts,
+    is_sorted,
+    read_artifact_bytes,
+    validate_cells,
+)
 
 
 def test_header_columns_match_dictionary(dictionary, payments):
@@ -110,6 +116,6 @@ def test_fixture_byte_equality(output_dir, expected_dir):
     """Produced artifact and committed fixture are byte-for-byte identical."""
     produced = artifact_path(output_dir, "payments")
     expected = artifact_path(expected_dir, "payments")
-    if produced == expected:
-        return
-    assert produced.read_bytes() == expected.read_bytes(), "payments.csv drifted"
+    assert_distinct_artifacts(produced, expected)
+    assert read_artifact_bytes(produced, output_dir) == read_artifact_bytes(expected, expected_dir), \
+        "payments.csv drifted"

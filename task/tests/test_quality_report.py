@@ -11,7 +11,13 @@ from __future__ import annotations
 
 import json
 
-from conftest import artifact_path, read_csv, read_report
+from conftest import (
+    artifact_path,
+    assert_distinct_artifacts,
+    read_artifact_bytes,
+    read_csv,
+    read_report,
+)
 
 INTEGER_METRICS = [
     "records_processed",
@@ -29,7 +35,7 @@ INTEGER_METRICS = [
 
 def test_report_is_valid_json(output_dir):
     """The report artifact parses as a JSON object."""
-    assert isinstance(read_report(artifact_path(output_dir, "report")), dict)
+    assert isinstance(read_report(artifact_path(output_dir, "report"), output_dir), dict)
 
 
 def test_report_shape(report):
@@ -64,19 +70,19 @@ def test_metrics_are_non_negative(report):
 
 def test_final_customer_count_matches(output_dir, report):
     """final_customer_count == number of customer rows."""
-    header, rows = read_csv(artifact_path(output_dir, "customers"))
+    header, rows = read_csv(artifact_path(output_dir, "customers"), output_dir)
     assert report["metrics"]["final_customer_count"] == len(rows)
 
 
 def test_final_order_count_matches(output_dir, report):
     """final_order_count == number of order rows."""
-    header, rows = read_csv(artifact_path(output_dir, "orders"))
+    header, rows = read_csv(artifact_path(output_dir, "orders"), output_dir)
     assert report["metrics"]["final_order_count"] == len(rows)
 
 
 def test_final_payment_count_matches(output_dir, report):
     """final_payment_count == number of payment rows."""
-    header, rows = read_csv(artifact_path(output_dir, "payments"))
+    header, rows = read_csv(artifact_path(output_dir, "payments"), output_dir)
     assert report["metrics"]["final_payment_count"] == len(rows)
 
 
@@ -87,7 +93,7 @@ def test_referential_integrity_violations_zero(report):
 
 def test_metrics_exactly_equal_committed_fixture(report, expected_dir):
     """Every published metric exactly equals the committed fixture."""
-    committed = read_report(artifact_path(expected_dir, "report"))
+    committed = read_report(artifact_path(expected_dir, "report"), expected_dir)
     assert report.get("metrics") == committed.get("metrics"), \
         "metrics differ from committed fixture"
 
@@ -96,6 +102,6 @@ def test_report_byte_equality(output_dir, expected_dir):
     """Produced report and committed fixture are byte-for-byte identical."""
     produced = artifact_path(output_dir, "report")
     expected = artifact_path(expected_dir, "report")
-    if produced == expected:
-        return
-    assert produced.read_bytes() == expected.read_bytes(), "data_quality_report.json drifted"
+    assert_distinct_artifacts(produced, expected)
+    assert read_artifact_bytes(produced, output_dir) == read_artifact_bytes(expected, expected_dir), \
+        "data_quality_report.json drifted"

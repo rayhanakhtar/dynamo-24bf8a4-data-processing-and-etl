@@ -12,7 +12,13 @@ from __future__ import annotations
 
 import re
 
-from conftest import artifact_path, is_sorted, validate_cells
+from conftest import (
+    artifact_path,
+    assert_distinct_artifacts,
+    is_sorted,
+    read_artifact_bytes,
+    validate_cells,
+)
 
 _CHANGEABLE = {"email", "last_name", "phone", "postal"}
 _ALLOWED_SOURCES = {"STORE", "MRK", "CAT", "IDP", "CRM"}
@@ -141,6 +147,6 @@ def test_fixture_byte_equality(output_dir, expected_dir):
     """Produced artifact and committed fixture are byte-for-byte identical."""
     produced = artifact_path(output_dir, "history")
     expected = artifact_path(expected_dir, "history")
-    if produced == expected:
-        return
-    assert produced.read_bytes() == expected.read_bytes(), "customer_history.csv drifted"
+    assert_distinct_artifacts(produced, expected)
+    assert read_artifact_bytes(produced, output_dir) == read_artifact_bytes(expected, expected_dir), \
+        "customer_history.csv drifted"

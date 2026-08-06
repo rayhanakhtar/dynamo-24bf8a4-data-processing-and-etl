@@ -119,6 +119,28 @@ def read_report(path: Path, base_dir: Optional[Path] = None) -> Dict[str, Any]:
         return json.load(fh)
 
 
+def read_artifact_bytes(path: Path, base_dir: Path) -> bytes:
+    """Read an artifact (or fixture) as raw bytes after path validation."""
+    _validate_artifact_path(path, base_dir)
+    with open(path, "rb") as fh:
+        return fh.read()
+
+
+def assert_distinct_artifacts(a: Path, b: Path) -> None:
+    """Reject produced == expected by resolving real paths.
+
+    Closes the acceptance-boundary gap where the verifier could compare an
+    artifact to itself and trivially pass; produced and expected must resolve
+    to two different files.
+    """
+    ra = a.resolve()
+    rb = b.resolve()
+    assert ra != rb, (
+        f"produced and expected resolve to the same artifact: {ra}; "
+        f"byte-equality is vacuous and cannot be enforced"
+    )
+
+
 # ---------------------------------------------------------------------------
 # cell format / sort checking (independent of any implementation)
 # ---------------------------------------------------------------------------
