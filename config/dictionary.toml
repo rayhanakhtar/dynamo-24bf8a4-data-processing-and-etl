@@ -22,12 +22,34 @@ bom = false
 quoting = "rfc4180"
 
 # -----------------------------------------------------------------------------
-# CURRENCY — exactly one rate per secondary currency keeps conversion
+# CURRENCY — exactly one fixed rate per secondary currency keeps conversion
 # deterministic. All money is stored as INTEGER minor units (cents).
+#
+# SEMANTICS OF rates[C]:
+#   rates[C] = the value of ONE unit of currency C expressed in the base
+#   currency (USD): the number of USD you receive for 1 unit of C.
+#   Example: rates["CAD"] = 0.75  means  1 CAD = 0.75 USD.
+#   rates["USD"] is always 1.0 (USD is the identity).
+#   A rate is NEVER "units of C per 1 USD" — do not divide.
+#
+# EXACT CONVERSION FORMULA (the only formula; used identically for every
+# payment and every order):
+#   amount_usd = round_half_up(amount_cents * rates[currency])
+#   * multiply amount_cents (minor units) by the currency's rate — never divide;
+#   * round the product to the nearest integer minor unit, half-up (x.5 rounds
+#     away from zero: 1.5 -> 2, -1.5 -> -2);
+#   * conversion happens PER-PAYMENT BEFORE aggregation: each payment's
+#     amount_usd = round_half_up(payment.amount_cents * rates[currency]), and
+#     an order's amount_usd is the SUM of its payments' amount_usd — never a
+#     single scaled conversion of the order total.
+#
+# The verifier independently recomputes amount_usd for every row using exactly
+# this formula and requires byte-for-byte equality with the committed fixtures,
+# so an implementation MUST reproduce it precisely.
 # -----------------------------------------------------------------------------
 [currency]
 base = "USD"
-rates = { USD = 1.0, CAD = 1.32 }   # single fixed FX → deterministic
+rates = { USD = 1.0, CAD = 0.75 }   # 1 CAD = 0.75 USD; fixed FX → deterministic
 rounding = "half_up"
 minor_units = 2
 
