@@ -1,15 +1,15 @@
-"""Shared fixtures/helpers for the Harbor output verifier (self-contained).
+"""Shared fixtures/helpers for the Harbor output verifier.
 
 The verifier runs inside the environment image with tests/ overlaid at /tests.
 It reads:
-    /app/output/              the agent's five canonical output files (declared
-                              in task.toml [artifacts])
-    /tests/expected/          committed oracle fixtures (ground truth)
-    /app/config/dictionary.toml   the public normative rules
+    /app/output/                  the agent's five canonical output files
+                                  (declared in task.toml [artifacts])
+    /app/data/                    the public source inputs
+    /app/config/dictionary.toml   the public task rules
 
-It is fully self-contained (Python 3.11+ stdlib, tomllib) — it must NOT import
-any private implementation code, because etl/ ships only with the solution and is
-not present at verify time. All checks operate on observable outputs only.
+Expected outputs are generated at verification time by executing the
+deterministic oracle ETL on the public task inputs. The regenerated artifacts
+are used as the verifier's expected outputs for comparison.
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 import tomllib
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -26,9 +27,18 @@ from typing import Any, Dict, List, Optional, Tuple
 import pytest
 
 TESTS_DIR = Path(__file__).resolve().parent
+if str(TESTS_DIR) not in sys.path:
+    sys.path.insert(0, str(TESTS_DIR))
 OUTPUT_DIR = Path(os.environ.get("DYNAMO_OUTPUT_DIR", "/app/output"))
 EXPECTED_DIR = Path(os.environ.get("DYNAMO_EXPECTED_DIR", "/tests/expected"))
 DICTIONARY_PATH = Path(os.environ.get("DYNAMO_DICTIONARY", "/app/config/dictionary.toml"))
+DATA_DIR = Path(os.environ.get("DYNAMO_DATA_DIR", "/app/data"))
+
+# Vendored copy of the deterministic oracle ETL (task/solution/etl -> tests/etl).
+# Used only by the verifier to regenerate expected outputs from the public task
+# inputs during verification.
+from etl.rules import load as rules_load  # noqa: E402
+from etl.pipeline import pipeline_main  # noqa: E402
 
 ARTIFACTS = {
     "customers": "customers.csv",
@@ -219,9 +229,26 @@ def output_dir() -> Path:
     return OUTPUT_DIR
 
 
+def recompute_expected() -> Path:
+    """Recompute the canonical outputs from the PUBLIC inputs using the oracle.
+
+    Runs the existing deterministic oracle ETL (`etl/`, vendored under tests/)
+    against `DATA_DIR` + `DICTIONARY_PATH` and returns a scratch dir holding the
+    freshly generated expected artifacts. This replaces grading against a
+    committed fixture-byte blob: expectations are derived from the source data
+    at verify time, so a submission cannot pass by merely replicating a
+    committed byte string the behavior never reproduces.
+    """
+    assert DATA_DIR.exists(), f"Missing data directory: {DATA_DIR}"
+    assert DICTIONARY_PATH.exists(), f"Missing dictionary: {DICTIONARY_PATH}"
+    scratch = Path(tempfile.mkdtemp(prefix="dynamo_expected_"))
+    pipeline_main(str(DATA_DIR), str(scratch), rules_load())
+    return scratch
+
+
 @pytest.fixture(scope="session")
 def expected_dir() -> Path:
-    return EXPECTED_DIR
+    return recompute_expected()
 
 
 @pytest.fixture(scope="session")
