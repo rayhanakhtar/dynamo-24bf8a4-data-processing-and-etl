@@ -77,7 +77,7 @@ def write_history(out_dir: str, rules: Dictionary, hist: List[History]) -> None:
 def write_report(out_dir: str, rules: Dictionary, report: Dict[str, Any]) -> None:
     target = _target(out_dir, rules, "data_quality_report")
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    target.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
 
 
 def _target(out_dir: str, rules: Dictionary, name: str) -> Path:
