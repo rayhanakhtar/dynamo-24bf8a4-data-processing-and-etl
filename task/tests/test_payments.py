@@ -14,6 +14,8 @@ The verifier inspects outputs only — never implementation code.
 
 from __future__ import annotations
 
+import re
+
 from conftest import (
     artifact_path,
     assert_distinct_artifacts,
@@ -51,6 +53,21 @@ def test_gid_unique(payments):
     gids = [r["gid"] for r in rows]
     assert all(gids), "empty gid present"
     assert len(gids) == len(set(gids)), "duplicate gid"
+
+
+def test_gid_derived_format(payments):
+    """payments.gid is the derived literal PAY + zero-padded payment_key (PAY%06d).
+
+    Independent of the fixture: a gid carried from a source system, or any
+    non-derivable scheme, would violate the deterministic key rule in the
+    dictionary even if every other column matched.
+    """
+    _, rows = payments
+    for r in rows:
+        assert re.fullmatch(r"PAY\d{6}", r["gid"]), \
+            f"payment {r['payment_key']} gid {r['gid']!r} not PAY%06d"
+        assert r["gid"] == "PAY%06d" % int(r["payment_key"]), \
+            f"payment {r['payment_key']} gid {r['gid']!r} not key-derived"
 
 
 def test_every_payment_references_existing_order(payments, orders):

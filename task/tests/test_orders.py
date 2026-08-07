@@ -79,8 +79,14 @@ def test_order_line_arithmetic_holds(orders):
             f"order {r['order_key']}: total {r['total_cents']} != {total}"
 
 
-def test_completed_orders_reconcile_with_payments(orders, payments):
-    """For completed orders, sum(payments.amount_usd) == orders.amount_usd."""
+def test_every_order_with_payments_reconciles(orders, payments):
+    """For every order carrying any non-sentinel payment, sum(payments.amount_usd) == orders.amount_usd.
+
+    Broader than a Completed-status restriction: an order whose status is
+    Refunded / Partially_Refunded / Processing still falls on paying money and
+    must keep ledger balance. A deferred implementation that honored only
+    Completed rows would be caught here. Derived from outputs only, no fixture.
+    """
     _, order_rows = orders
     _, pay_rows = payments
     by_order: dict = {}
@@ -90,11 +96,43 @@ def test_completed_orders_reconcile_with_payments(orders, payments):
                 + int(p["amount_usd"])
     mismatches = []
     for r in order_rows:
-        if r["status"] == "Completed":
-            key = int(r["order_key"])
-            if int(r["amount_usd"]) != by_order.get(key, 0):
-                mismatches.append((key, r["amount_usd"], by_order.get(key, 0)))
+        key = int(r["order_key"])
+        if key in by_order and int(r["amount_usd"]) != by_order.get(key, 0):
+            mismatches.append((key, r["amount_usd"], by_order.get(key, 0)))
     assert not mismatches, f"reconciliation mismatches: {mismatches[:5]}"
+
+
+def test_global_money_conservation(orders, payments):
+    """sum(orders.amount_usd) == sum(payments.amount_usd) over non-sentinel payments.
+
+    Guards against whole-table drift that per-row reconciliation could hide;
+    catching a global monetary leakage regardless of order status.
+    """
+    _, order_rows = orders
+    _, pay_rows = payments
+    order_total = sum(int(r["amount_usd"]) for r in order_rows)
+    pay_total = sum(int(p["amount_usd"]) for p in pay_rows
+                    if int(p["order_key"]) != 0)
+    assert order_total == pay_total, \
+        f"money conservation: orders {order_total} != payments {pay_total}"
+
+
+def test_ship_to_address_is_all_or_nothing(orders):
+    """A ship_to block is either fully present or absent; no partial address.
+
+    Mirrors the complete_address invariant on the orders shipping block, and is
+    independent of the fixture: a hardcoded row set that stitched a mail/line
+    subset would fail here.
+    """
+    _, rows = orders
+    fields = ("ship_to_name", "ship_to_line1", "ship_to_city",
+              "ship_to_postal", "ship_to_country")
+    partial = []
+    for r in rows:
+        present = sum(1 for f in fields if r[f].strip())
+        if 0 < present < len(fields):
+            partial.append((r["order_key"], present))
+    assert not partial, f"partial ship_to addresses: {partial[:5]}"
 
 
 def test_orders_customer_fk_integrity(orders, customers):

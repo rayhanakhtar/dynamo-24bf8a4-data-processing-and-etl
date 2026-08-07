@@ -95,6 +95,42 @@ def test_customer_gid_format(customers):
     assert len(gids) == len(set(gids)), "duplicate gid"
 
 
+def test_active_email_unique(customers):
+    """No duplicate normalized email across active customers (unique_active_email).
+
+    Independent of the fixture: two active customers sharing an email violate
+    the entity-resolution invariant even if the committed file never does so.
+    """
+    _, rows = customers
+    seen = {}
+    for r in rows:
+        if r["is_active"] != "true":
+            continue
+        email = r["email"]
+        if email:
+            if email in seen:
+                raise AssertionError(
+                    f"active emails collide: {email!r} used by customers "
+                    f"{seen[email]} and {r['customer_key']}")
+            seen[email] = r["customer_key"]
+
+
+def test_active_phone_unique(customers):
+    """No duplicate E.164 phone across active customers (unique_active_phone)."""
+    _, rows = customers
+    seen = {}
+    for r in rows:
+        if r["is_active"] != "true":
+            continue
+        phone = r["phone"]
+        if phone:
+            if phone in seen:
+                raise AssertionError(
+                    f"active phones collide: {phone!r} used by customers "
+                    f"{seen[phone]} and {r['customer_key']}")
+            seen[phone] = r["customer_key"]
+
+
 def test_is_active_defaults_true_when_no_idp(customers):
     """is_active defaults to true when no IDP record in linked cluster."""
     _, rows = customers

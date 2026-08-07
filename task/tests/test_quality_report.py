@@ -91,6 +91,36 @@ def test_referential_integrity_violations_zero(report):
     assert report["metrics"]["referential_integrity_violations"] == 0
 
 
+def test_metrics_are_consistent_with_row_counts(report, output_dir):
+    """Recompute count metrics from the produced rows, independent of fixtures.
+
+    final_customer_count/final_order_count/final_payment_count must equal the
+    number of data rows in the corresponding artifact. This derives the report
+    from the artifacts — closing the report as a standalone hardcoded metric.
+    """
+    def nrows(artifact):
+        header, rows = read_csv(artifact_path(output_dir, artifact), output_dir)
+        return len(rows)
+    assert report["metrics"]["final_customer_count"] == nrows("customers")
+    assert report["metrics"]["final_order_count"] == nrows("orders")
+    assert report["metrics"]["final_payment_count"] == nrows("payments")
+
+
+def test_null_values_imputed_recomputes_from_customers(report, output_dir):
+    """null_values_imputed == count of non-empty customer columns (excl pk/gid).
+
+    The metric is a pure cell-level tally over the produced customers file, so
+    a truthful pipeline must reproduce it from its own output without reference
+    to the fixture bytes.
+    """
+    header, rows = read_csv(artifact_path(output_dir, "customers"), output_dir)
+    excluded = {"customer_key", "gid"}
+    tally = sum(1 for r in rows for col in header
+                if col not in excluded and r.get(col, "").strip() != "")
+    assert report["metrics"]["null_values_imputed"] == tally, \
+        f"null_values_imputed {report['metrics']['null_values_imputed']} != recomputed {tally}"
+
+
 def test_metrics_exactly_equal_committed_fixture(report, expected_dir):
     """Every published metric exactly equals the committed fixture."""
     committed = read_report(artifact_path(expected_dir, "report"), expected_dir)
