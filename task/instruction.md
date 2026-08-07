@@ -1,88 +1,23 @@
-# Northstar Commerce — Consolidated Customer/Order/Payment Pipeline
+Transform the source exports under `/app/data/` into the canonical Northstar Commerce datasets. The input consists of eight source systems (`store`, `pay`, `crm`, `erp`, `idp`, `support`, `marketing`, and `retail`) containing CSV and NDJSON exports. These files intentionally contain malformed records, duplicated data, schema drift, inconsistent field names, invalid timestamps, obsolete or missing references, and other data-quality problems. Ignore records that cannot be parsed or resolved into valid canonical entities.
 
-## Objective
-Build a deterministic ETL pipeline that merges eight degraded source exports into five canonical output artifacts for the Northstar Commerce platform.
+Use `/app/config/dictionary.toml` as the authoritative specification. It defines every required source schema, canonical output schema, identifier format, normalization rule, precedence rule, entity-resolution rule, history-generation rule, currency-conversion rule, payment-linkage rule, serialization requirement, published metric, and output invariant. Whenever a rule is specified there, follow it exactly.
 
-## Inputs
-Source datasets reside under `/app/data/` in eight directories:
-- `store` — retail transactions
-- `pay` — payment records
-- `crm` — customer relationship data
-- `erp` — enterprise resource planning invoices & shipments
-- `idp` — identity provider records
-- `support` — support tickets
-- `marketing` — marketing campaign data
-- `retail` — retail customer data
+Produce exactly five files: `/app/output/customers.csv`, `/app/output/orders.csv`, `/app/output/payments.csv`, `/app/output/customer_history.csv`, and `/app/output/data_quality_report.json`.
 
-Each contains CSV or NDJSON exports with deliberate corruptions:
-- Malformed rows (JSON/CSV syntax errors, column-count mismatches)
-- Unparseable or inconsistent timestamps across multiple formats
-- Obsolete or missing foreign-key references
-- Duplicate rows
-- Renamed or inconsistent column values
+Each CSV must exactly match the schema declared in `[outputs]` of the dictionary, including column order, field types, primary-key definitions, required sort order, and serialization. Primary keys must be unique, non-empty, contiguous beginning at 1, and contain no gaps.
 
-The normative rule set is `/app/config/dictionary.toml`. It is the **single source of truth** for:
-- Source schemas (fields, types, roles, identifier formats)
-- Output schemas (column names, order, types, formats, primary keys, sort order)
-- Currency conversion and rounding rules
-- Datetime parse order and output format
-- Normalization rules
-- Entity-matching and precedence rules
-- Global identifier precedence (source priority)
-- Payment-to-order linkage logic
-- Customer-history reconstruction rules
-- Published metrics and their invariants
+Normalize values according to the dictionary. Monetary amounts are stored as integer cents, including negative values for refunds. Emit timestamps as UTC ISO-8601 using the format `YYYY-MM-DDTHH:MM:SSZ`. Store email addresses in lowercase, phone numbers in E.164 format, and postal codes, regions, and countries in uppercase. Leave any unresolved field empty instead of inventing a value.
 
-## Required Outputs
-Produce exactly five files in `/app/output/`:
-1. `/app/output/customers.csv`
-2. `/app/output/orders.csv`
-3. `/app/output/payments.csv`
-4. `/app/output/customer_history.csv`
-5. `/app/output/data_quality_report.json`
+Entity matching must deterministically merge records describing the same customer. Canonical identifiers and attribute precedence must follow the dictionary exactly. Records that cannot be parsed or that reference unresolved entities must not appear in the outputs.
 
-## Output Specifications
+Orders and payments must reference their canonical entities. Completed orders must reconcile exactly with their associated payments after currency conversion. ERP refund sentinel rows (`order_key == 0`) are the only permitted exception and follow the linkage rules defined in the dictionary.
 
-### Schema & Ordering
-Column names, order, types, and formats for each CSV are declared in `[outputs]` of `/app/config/dictionary.toml`. Files must match exactly.
-Primary keys: unique, non-empty, contiguous from 1.
-Row ordering: ascending by declared sort columns.
+Currency conversion is defined by `[currency]`. Each rate represents the USD value of one unit of the source currency. Convert each payment independently by multiplying its amount in cents by the corresponding rate and applying half-up rounding. An order's USD amount is the sum of its converted payments rather than a converted order total.
 
-### Data Formats
-- **Money**: integer cents (minor units); negative for refunds
-- **Timestamps**: UTC ISO-8601 with `Z` suffix (`YYYY-MM-DDTHH:MM:SSZ`)
-- **Email**: lowercase
-- **Phone**: E.164 (`+...`)
-- **Postal code, region, country**: uppercase
-- Unresolvable fields: empty
+Write `/app/output/data_quality_report.json` as a JSON object whose structure, serialization, key ordering, integer metrics, and contents satisfy the dictionary. Every published metric must agree with the generated CSV outputs.
 
-### Currency Conversion
-Rates in `[currency]` give USD per unit (e.g., `CAD=0.75` → 1 CAD = 0.75 USD).
-Formula: `amount_usd = round_half_up(amount_cents × rate)`
-- Always **multiply** cents by rate (never divide)
-- Round half-up (0.5 rounds away from zero)
-- Apply per-payment **before** aggregation
-- Order `amount_usd` = sum of its payments' `amount_usd` (not a scaled order total)
-- Verifier recomputes every USD value with this exact formula and enforces byte-for-byte equality
+For identical inputs, the pipeline must always generate byte-identical outputs.
 
-### Entity Resolution
-- Deterministic merge of identical real-world customers across sources
-- Canonical ID assigned per global source-priority rule (dictionary)
-- Unparseable records and records referencing missing entities excluded from output
+Write `/app/output/data_quality_report.json` as a JSON object whose structure, serialization, key ordering, integer metrics, and contents satisfy the dictionary. Every published metric must agree with the generated CSV outputs.
 
-### Linkage & Integrity
-- Orders and payments must link to their canonical customer/order
-- Completed orders must reconcile exactly to payments in USD
-- Every payment references an existing canonical order
-- **Exception**: ERP sentinel payments (`order_key == 0`) from ERP invoice-match refunds — excluded from referential-integrity and reconciliation checks (see `payment_order_exists` invariant in dictionary)
-
-## Quality Report
-`/app/output/data_quality_report.json` — JSON object with:
-- `number_type = "int"`
-- `key_order = "sorted"`
-- `include_details = true`
-- `metrics` object containing **every** metric defined in `[metrics]` of the dictionary
-- Each metric: integer, consistent with actual CSV row counts (e.g., `final_customer_count` = rows in `customers.csv`)
-
-## Determinism
-Same inputs → byte-identical outputs. No invented values; unresolvable fields remain empty.
+For identical inputs, the pipeline must always generate byte-identical outputs.
