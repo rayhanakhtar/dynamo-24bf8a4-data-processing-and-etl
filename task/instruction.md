@@ -17,7 +17,3 @@ Currency conversion is defined by `[currency]`. Each rate represents the USD val
 Write `/app/output/data_quality_report.json` as a JSON object whose structure, serialization, key ordering, integer metrics, and contents satisfy the dictionary. Every published metric must agree with the generated CSV outputs.
 
 For identical inputs, the pipeline must always generate byte-identical outputs.
-
-Write `/app/output/data_quality_report.json` as a JSON object whose structure, serialization, key ordering, integer metrics, and contents satisfy the dictionary. Every published metric must agree with the generated CSV outputs.
-
-For identical inputs, the pipeline must always generate byte-identical outputs.
