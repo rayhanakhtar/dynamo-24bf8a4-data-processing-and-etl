@@ -72,6 +72,19 @@ def test_old_and_new_values_differ(history):
             f"history {r['history_key']}: old == new"
 
 
+def test_change_states_unique(history):
+    """No duplicate (customer_key, attribute, effective_from) change states.
+
+    The sort key uniquely identifies each emitted change; a duplicated state is
+    either a duplicated row or a broken effective_from assignment. Derived from
+    the produced output itself — no fixture.
+    """
+    _, rows = history
+    states = [(r["customer_key"], r["attribute"], r["effective_from"]) for r in rows]
+    assert len(states) == len(set(states)), \
+        "duplicate (customer_key, attribute, effective_from) change state"
+
+
 def test_effective_from_is_iso_and_to_is_empty_or_iso(history):
     """effective_from is ISO8601; effective_to is empty (open) or ISO."""
     import re

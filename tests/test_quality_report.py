@@ -101,6 +101,21 @@ def test_referential_integrity_violations_zero(report):
     assert report["metrics"]["referential_integrity_violations"] == 0
 
 
+def test_null_values_imputed_recomputes_from_customers(report, output_dir):
+    """null_values_imputed == count of non-empty customer cells (excl pk/gid).
+
+    The metric is a pure cell-level tally over the produced customers file, so a
+    truthful pipeline reproduces it from its own output — no fixture involved.
+    """
+    from conftest import read_csv
+    header, rows = read_csv(artifact_path(output_dir, "customers"))
+    excluded = {"customer_key", "gid"}
+    tally = sum(1 for r in rows for col in header
+                if col not in excluded and r.get(col, "").strip() != "")
+    assert report["metrics"]["null_values_imputed"] == tally, \
+        f"null_values_imputed {report['metrics']['null_values_imputed']} != recomputed {tally}"
+
+
 def test_fixture_byte_equality(output_dir, expected_dir, dictionary):
     """Committed fixture and produced artifact are byte-for-byte identical."""
     produced = artifact_path(output_dir, "report")

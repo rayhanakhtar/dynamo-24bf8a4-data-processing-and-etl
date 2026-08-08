@@ -91,6 +91,47 @@ def test_address_codes_uppercased(dictionary, customers):
                 raise AssertionError(f"customer {r['customer_key']} {col}={v!r} not uppercased")
 
 
+def test_active_email_unique(customers):
+    """No duplicate normalized email across active customers.
+
+    Output-derived invariant (unique_active_email): the produced customers
+    file itself must not contain two active customers sharing an email.
+    Independent of the committed fixture.
+    """
+    _, rows = customers
+    seen = {}
+    for r in rows:
+        if r["is_active"] != "true":
+            continue
+        email = r["email"]
+        if email:
+            if email in seen:
+                raise AssertionError(
+                    f"active emails collide: {email!r} used by customers "
+                    f"{seen[email]} and {r['customer_key']}")
+            seen[email] = r["customer_key"]
+
+
+def test_active_phone_unique(customers):
+    """No duplicate E.164 phone across active customers.
+
+    Output-derived invariant (unique_active_phone), independent of the
+    committed fixture.
+    """
+    _, rows = customers
+    seen = {}
+    for r in rows:
+        if r["is_active"] != "true":
+            continue
+        phone = r["phone"]
+        if phone:
+            if phone in seen:
+                raise AssertionError(
+                    f"active phones collide: {phone!r} used by customers "
+                    f"{seen[phone]} and {r['customer_key']}")
+            seen[phone] = r["customer_key"]
+
+
 def test_fixture_byte_equality(output_dir, expected_dir, dictionary):
     """Committed fixture and produced artifact are byte-for-byte identical."""
     produced = artifact_path(output_dir, "customers")
