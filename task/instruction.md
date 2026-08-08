@@ -8,6 +8,8 @@ Each CSV must exactly match the schema declared in `[outputs]` of the dictionary
 
 Normalize values according to the dictionary. Monetary amounts are stored as integer cents, including negative values for refunds. Emit timestamps as UTC ISO-8601 using the format `YYYY-MM-DDTHH:MM:SSZ`. Store email addresses in lowercase, phone numbers in E.164 format, and postal codes, regions, and countries in uppercase. Leave any unresolved field empty instead of inventing a value.
 
+For name normalization, `case = "title"` means apply the standard Python `str.title()` transformation to the trimmed, suffix-stripped name string. Apply this transformation deterministically to the complete normalized name value.
+
 Entity matching must deterministically merge records describing the same customer. Canonical identifiers and attribute precedence must follow the dictionary exactly. Records that cannot be parsed or that reference unresolved entities must not appear in the outputs.
 
 Multiple source records may resolve to the same canonical customer even when their non-key attributes conflict. Retail customer records may share a normalized phone number while differing in email or name; such records must remain one resolved customer rather than being split into separate customers. Resolve conflicting canonical attributes using the source precedence and deterministic tie-breaking rules defined in the dictionary, and never choose a conflicting value arbitrarily.

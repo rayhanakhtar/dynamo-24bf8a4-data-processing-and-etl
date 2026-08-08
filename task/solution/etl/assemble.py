@@ -123,7 +123,7 @@ def _erp_match(raw: Raw, cust_map: Dict[str, int], rules: Dictionary) -> Dict[st
             gap = abs((idate - pdate).days)
             if gap > 10:
                 continue
-            if best_gap is None or gap < best_gap or (gap == best_gap and ob["order_id"] < best["order_id"]):
+            if best_gap is None or gap < best_gap or (gap == best_gap and ob["order_id"] < best.order_id):
                 best_gap, best = gap, _mk_order(ob, ck)
         if best is not None:
             result[inv["invoice_no"]] = best
