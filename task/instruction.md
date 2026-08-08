@@ -12,12 +12,14 @@ For name normalization, `case = "title"` means apply the standard Python `str.ti
 
 Entity matching must deterministically merge records describing the same customer. Canonical identifiers and attribute precedence must follow the dictionary exactly. Records that cannot be parsed or that reference unresolved entities must not appear in the outputs.
 
-Multiple source records may resolve to the same canonical customer even when their non-key attributes conflict. Retail customer records may share a normalized phone number while differing in email or name; such records must remain one resolved customer rather than being split into separate customers. Resolve conflicting canonical attributes using the source precedence and deterministic tie-breaking rules defined in the dictionary, and never choose a conflicting value arbitrarily.
+Multiple source records may resolve to the same canonical customer even when their non-key attributes conflict. Retail customer records may share a normalized phone number while differing in email or name; such records must remain one resolved customer rather than being split into separate customers. Resolve conflicting canonical attributes using the source precedence and deterministic tie-breaking rules defined in the dictionary, and never choose a conflicting value arbitrarily. When multiple records have the same source priority, select the valid non-empty value from the record with the lowest source row identifier; numeric row identifiers are compared numerically, while non-numeric identifiers are compared lexicographically. For RETAIL/CAT records specifically, records with the same CAT source priority therefore resolve conflicting attributes by the lowest `cust_no`.
 
 Orders and payments must reference their canonical entities. Completed orders must reconcile exactly with their associated payments after currency conversion. ERP refund sentinel rows (`order_key == 0`) are the only permitted exception and follow the linkage rules defined in the dictionary.
 
 Currency conversion is defined by `[currency]`. Each rate represents the USD value of one unit of the source currency. Convert each payment independently by multiplying its amount in cents by the corresponding rate and applying half-up rounding. An order's USD amount is the sum of its converted payments rather than a converted order total.
 
 Write `/app/output/data_quality_report.json` as a JSON object whose structure, serialization, key ordering, integer metrics, and contents satisfy the dictionary. Every published metric must agree with the generated CSV outputs.
+
+For the `foreign_keys_repaired` metric, inspect SUP support tickets only. A ticket contributes 1 when its non-empty `order_ref`, after uppercasing for the `OR-` prefix check, starts with `OR-`; remove the first three characters from the original reference, lowercase the remainder, prepend `or_`, and count the ticket only if that resulting canonical STORE order identifier exists. Empty, non-`OR-`, and unresolved references contribute 0. Payment `order_ref` values are not included in this metric.
 
 For identical inputs, the pipeline must always generate byte-identical outputs.
