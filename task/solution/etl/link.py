@@ -109,17 +109,17 @@ def link(raw: Raw, rules: Dictionary) -> Tuple[List[Customer], int, Dict[str, in
         return s
 
     def _weak(na: _Node, nb: _Node) -> bool:
-        # declared combos only: [name, postal] AND [first_name, postal, dob]
-        if na.name and na.name == nb.name and na.postal and na.postal == nb.postal:
+        # declared combos only, each literal:
+        #   [name, postal]                 -> both present AND equal
+        #   [first_name, postal, dob]      -> all three present AND equal
+        if (na.name and nb.name and na.name == nb.name
+                and na.postal and nb.postal and na.postal == nb.postal):
             return True
-        hits = 0
-        if na.first_name and na.first_name == nb.first_name:
-            hits += 1
-        if na.postal and na.postal == nb.postal:
-            hits += 1
-        if na.dob and na.dob == nb.dob:
-            hits += 1
-        return hits >= 2
+        if (na.first_name and nb.first_name and na.first_name == nb.first_name
+                and na.postal and nb.postal and na.postal == nb.postal
+                and na.dob and nb.dob and na.dob == nb.dob):
+            return True
+        return False
 
     def _agg(nodes_in: List[int]) -> _Node:
         # component-level signature: first non-null value seen for each attr

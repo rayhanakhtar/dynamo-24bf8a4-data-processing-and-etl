@@ -77,7 +77,7 @@ def write_history(out_dir: str, rules: Dictionary, hist: List[History]) -> None:
 def write_report(out_dir: str, rules: Dictionary, report: Dict[str, Any]) -> None:
     target = _target(out_dir, rules, "data_quality_report")
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    target.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
 
 
 def _target(out_dir: str, rules: Dictionary, name: str) -> Path:
@@ -147,7 +147,18 @@ def _format(value, meta) -> str:
         return ""
     if meta.get("format") == "bool":
         return "true" if value else "false"
+    if meta.get("format") == "date_only":
+        return _date_only(value)
     return str(value)
+
+
+def _date_only(value) -> str:
+    """Serialize a canonical ISO timestamp (or already date-only string) as
+    YYYY-MM-DD, per the dictionary's `date_only` output format."""
+    s = str(value)
+    if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+        return s[:10]
+    return s
 
 
 def _payment_row(p: Payment) -> List[str]:

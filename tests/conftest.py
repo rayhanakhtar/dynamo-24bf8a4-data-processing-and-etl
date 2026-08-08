@@ -94,8 +94,7 @@ def check_cell(value: str, meta: Dict[str, Any], nullable: bool) -> Optional[str
     if fmt == "iso":
         return None if _RE_ISO.fullmatch(value) else f"not ISO8601_Z: {value!r}"
     if fmt == "date_only":
-        return None if (_RE_DATE.fullmatch(value) or _RE_ISO.fullmatch(value)) \
-            else f"not a date or ISO: {value!r}"
+        return None if _RE_DATE.fullmatch(value) else f"not a date (YYYY-MM-DD): {value!r}"
     if fmt == "e164":
         return None if _RE_E164.fullmatch(value) else f"not E.164: {value!r}"
     if fmt == "lowercase_email":

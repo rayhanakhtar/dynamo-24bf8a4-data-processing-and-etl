@@ -147,7 +147,18 @@ def _format(value, meta) -> str:
         return ""
     if meta.get("format") == "bool":
         return "true" if value else "false"
+    if meta.get("format") == "date_only":
+        return _date_only(value)
     return str(value)
+
+
+def _date_only(value) -> str:
+    """Serialize a canonical ISO timestamp (or already date-only string) as
+    YYYY-MM-DD, per the dictionary's `date_only` output format."""
+    s = str(value)
+    if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+        return s[:10]
+    return s
 
 
 def _payment_row(p: Payment) -> List[str]:

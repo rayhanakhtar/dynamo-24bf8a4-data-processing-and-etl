@@ -285,9 +285,9 @@ def _check_cell(value: Optional[str], fmt: str, nullable: bool,
     if fmt == "iso":
         return None if _RE_ISO.fullmatch(v) else f"not ISO8601_Z: {v!r}"
     if fmt == "date_only":
-        # Accept both pure date (YYYY-MM-DD) and ISO timestamp (YYYY-MM-DDTHH:MM:SSZ)
-        # The oracle pipeline outputs full ISO for date_only fields.
-        return None if (_RE_DATE.fullmatch(v) or _RE_ISO.fullmatch(v)) else f"not a date or ISO: {v!r}"
+        # canonical pure date only (YYYY-MM-DD); the oracle serializes
+        # date_only fields at the output boundary, no ISO accepted here.
+        return None if _RE_DATE.fullmatch(v) else f"not a date (YYYY-MM-DD): {v!r}"
     if fmt == "e164":
         return None if _RE_E164.fullmatch(v) else f"not E.164: {v!r}"
     if fmt == "lowercase_email":
