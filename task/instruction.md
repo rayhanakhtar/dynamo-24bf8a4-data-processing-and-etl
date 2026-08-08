@@ -10,6 +10,8 @@ Normalize values according to the dictionary. Monetary amounts are stored as int
 
 Entity matching must deterministically merge records describing the same customer. Canonical identifiers and attribute precedence must follow the dictionary exactly. Records that cannot be parsed or that reference unresolved entities must not appear in the outputs.
 
+Multiple source records may resolve to the same canonical customer even when their non-key attributes conflict. Retail customer records may share a normalized phone number while differing in email or name; such records must remain one resolved customer rather than being split into separate customers. Resolve conflicting canonical attributes using the source precedence and deterministic tie-breaking rules defined in the dictionary, and never choose a conflicting value arbitrarily.
+
 Orders and payments must reference their canonical entities. Completed orders must reconcile exactly with their associated payments after currency conversion. ERP refund sentinel rows (`order_key == 0`) are the only permitted exception and follow the linkage rules defined in the dictionary.
 
 Currency conversion is defined by `[currency]`. Each rate represents the USD value of one unit of the source currency. Convert each payment independently by multiplying its amount in cents by the corresponding rate and applying half-up rounding. An order's USD amount is the sum of its converted payments rather than a converted order total.
