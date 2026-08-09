@@ -109,8 +109,15 @@ strip_spaces = true
 # -----------------------------------------------------------------------------
 # ENTITY MATCHING — deterministic record linkage.
 # A pair is a strong match if any single strong attribute matches exactly.
-# A pair ALSO matches if its composite score >= threshold.
-# Transitivity is applied over STRONG edges only (weak edges never merge blobs).
+# Strong edges (shared email or phone) are established FIRST and are transitive.
+# Weak matching is applied AFTER strong-edge components are formed and uses ONLY
+# the declared `weak_match_combinations` below (both attributes in a combination
+# must be present and equal). Weak combinations are evaluated against each
+# component's aggregate signature (first non-null value seen for each attribute
+# across the component). A weak match may attach a record/component to an
+# existing component; weak matching is NOT restricted to singleton-vs-singleton
+# pairs. `composite_threshold` and `composite_weights` are declared for
+# reference only and are NOT an additional operative matching mechanism.
 # Ties resolve by source_priority (lower number wins), then lexicographic email.
 # -----------------------------------------------------------------------------
 [entity_matching]

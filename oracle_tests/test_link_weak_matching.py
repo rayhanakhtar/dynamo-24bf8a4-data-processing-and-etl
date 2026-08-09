@@ -51,6 +51,14 @@ def _emails(rows):
     return sorted(c.email for c in rows if c.email)
 
 
+def _mrk(profile_id, **kw):
+    base = {"type": "subscriber", "src": "MRK", "profile_id": profile_id,
+            "email": None, "first_name": None, "last_name": None,
+            "name": None, "postal": None}
+    base.update(kw)
+    return base
+
+
 def test_strong_email_alone_merges(rules):
     raw = Raw(identities=[
         _identity("idp_a", email="a@x.com", given_name="Ann", family_name="Able"),
@@ -166,3 +174,35 @@ def test_weak_not_merged_when_only_first_name_and_dob(rules):
     ])
     customers, _, _ = link(raw, rules)
     assert len(customers) == 2
+
+
+def test_weak_singleton_attaches_to_existing_strong_component(rules):
+    raw = Raw(
+        identities=[_identity("idp_a", email="sarah@example.com",
+                              name="Sarah Lee")],
+        cat_rows=[_cat("C1", email="sarah@example.com",
+                       name="Sarah Lee", postal="10001")],
+        mrk_subscribers=[_mrk("mk_a", email="prior.sarah@example.com",
+                              first_name="Sarah", last_name="Lee",
+                              name="Sarah Lee", postal="10001")],
+    )
+    customers, _, email_to_customer = link(raw, rules)
+    assert len(customers) == 1
+    assert email_to_customer["sarah@example.com"] == 1
+    assert email_to_customer["prior.sarah@example.com"] == 1
+
+
+def test_weak_singleton_without_shared_combo_stays_separate(rules):
+    raw = Raw(
+        identities=[_identity("idp_a", email="sarah@example.com",
+                              name="Sarah Lee")],
+        cat_rows=[_cat("C1", email="sarah@example.com",
+                       name="Sarah Lee", postal="10001")],
+        mrk_subscribers=[_mrk("mk_a", email="prior.sarah@example.com",
+                              first_name="Sarah", last_name="Lee",
+                              name="Sarah Lee", postal="20002")],
+    )
+    customers, _, email_to_customer = link(raw, rules)
+    assert len(customers) == 2
+    assert email_to_customer["sarah@example.com"] == 1
+    assert email_to_customer["prior.sarah@example.com"] == 2
