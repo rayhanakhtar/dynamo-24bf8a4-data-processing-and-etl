@@ -126,6 +126,10 @@ weak_match_combinations = [
 ]
 tie_break_primary = "source_priority"
 tie_break_secondary = "email_lexicographic"
+# CAT-specific tie-break: when multiple CAT records have the same source priority
+# and conflict on a canonical attribute, the record with the lowest numeric
+# cust_no wins. This is implemented by comparing numeric row identifiers
+# numerically (lower wins) vs lexicographic comparison for non-numeric IDs.
 
 # -----------------------------------------------------------------------------
 # IDENTIFIERS (gid) — every canonical record carries a unique gid.
@@ -387,7 +391,7 @@ customer_internal_id = { type = "numeric", prefix = "", length = 5 }
 invoice_no = { type = "string", role = "pk", maps_to = "orders.order_key" }
 customer_internal_id = { type = "string", role = "fk", refs = "local_customer" }
 bill_to = { type = "string", role = "data", maps_to = "customers.name_block" }
-total_cents = { type = "money", role = "data", maps_to = "orders.total_cents" }
+total_cents = { type = "money", role = "data", maps_to = "orders.total_cents", description = "Invoices with unparseable total_cents are rejected and not processed." }
 currency = { type = "string", role = "data", maps_to = "orders.currency" }
 issue_date = { type = "timestamp", role = "data", maps_to = "orders.placed_ts" }
 
@@ -425,7 +429,7 @@ gender = { type = "string", role = "data", maps_to = "customers.gender" }
 household = { type = "string", role = "data", maps_to = "customers.household" }
 created_ts = { type = "timestamp", role = "data", maps_to = "customers.created_ts" }
 updated_ts = { type = "timestamp", role = "data", maps_to = "customers.updated_ts" }
-status = { type = "string", role = "data", maps_to = "customers.is_active" }
+status = { type = "string", role = "data", maps_to = "customers.is_active", enum = ["active", "marked_for_deletion"], description = "Normalized status value. Only 'active' maps to is_active=true; all other values map to is_active=false." }
 profile_completeness = { type = "float", role = "data", maps_to = "customers.profile_completeness" }
 
 # --- 6. SUP — Support helpdesk, CSV with nullable/malformed timestamps ----

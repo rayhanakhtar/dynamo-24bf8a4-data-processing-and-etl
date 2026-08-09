@@ -6,9 +6,11 @@ Produce exactly five files: `/app/output/customers.csv`, `/app/output/orders.csv
 
 Each CSV must exactly match the schema declared in `[outputs]` of the dictionary, including column order, field types, primary-key definitions, required sort order, and serialization. Primary keys must be unique, non-empty, contiguous beginning at 1, and contain no gaps.
 
-Normalize values according to the dictionary. Monetary amounts are stored as integer cents, including negative values for refunds. Emit timestamps as UTC ISO-8601 using the format `YYYY-MM-DDTHH:MM:SSZ`. Store email addresses in lowercase, phone numbers in E.164 format, and postal codes, regions, and countries in uppercase. Leave any unresolved field empty instead of inventing a value.
+Normalize values according to the dictionary. Monetary amounts are stored as integer cents, including negative values for refunds. Emit timestamps as UTC ISO-8601 using the format `YYYY-MM-DDTHH:MM:SSZ`. Store email addresses in lowercase, phone numbers in E.164 format, and postal codes, regions, and countries in uppercase. Leave any unresolved field empty instead of inventing a value. Records that cannot be parsed into a valid canonical row must be discarded; for example, an ERP invoice whose `total_cents` is not a parseable integer money value is invalid and must not contribute to any invoice-to-order match.
 
 For name normalization, `case = "title"` means apply the standard Python `str.title()` transformation to the trimmed, suffix-stripped name string. Apply this transformation deterministically to the complete normalized name value.
+
+For IDP records, derive the canonical `is_active` boolean from the normalized IDP `status`: if the normalized status equals `active`, set `is_active` to `true`; otherwise set `is_active` to `false`. This mapping applies to every IDP record that contributes to a canonical customer.
 
 Entity matching must deterministically merge records describing the same customer. Canonical identifiers and attribute precedence must follow the dictionary exactly. Records that cannot be parsed or that reference unresolved entities must not appear in the outputs.
 
