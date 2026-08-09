@@ -205,7 +205,7 @@ def _parse_idp(rows: List[Optional[Dict[str, Any]]], nm: Normalizer, raw: Raw) -
             "household": r.get("household"),
             "created": created_iso,
             "updated": updated_iso,
-            "is_active": status == "active",
+            "is_active": bool(status) and status.lower() == "active",
             "profile_completeness": r.get("profile_completeness"),
         })
         kept += 1

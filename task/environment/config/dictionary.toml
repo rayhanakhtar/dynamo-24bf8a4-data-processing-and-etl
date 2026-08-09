@@ -244,8 +244,14 @@ effective_from = "idp.updated_ts"        # fallback: 2024-05-01T00:00:00Z
 # -----------------------------------------------------------------------------
 # PRECEDENCE — conflict resolution is PER-ATTRIBUTE (never per-row). For each
 # canonical attribute, take the value from the highest-priority source that
-# supplies a valid NOn-null value. Nulls are imputed ONLY via precedence (never
+# supplies a valid non-null value. Nulls are imputed ONLY via precedence (never
 # fabricated).
+#
+# A source supplies every normalized attribute its parsed records carry, even
+# when that attribute's schema maps_to declaration names a different canonical
+# output context. In particular, STORE ship-to/address values are eligible
+# inputs for the corresponding customer address attributes during customer
+# merging, at STORE's source priority.
 # -----------------------------------------------------------------------------
 [precedence]
 per_attribute = true
